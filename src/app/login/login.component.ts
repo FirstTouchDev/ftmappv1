@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
 
      protected isLoading = signal<boolean>(false);
      protected displayEye = signal<boolean>(false);
-     protected errorMessage = signal<string>('');
 
      protected username: string = '';
      protected password: string = '';
@@ -73,11 +72,10 @@ export class LoginComponent implements OnInit {
                     if (userAccountDocumentId){
                          this._verifiedUserAccountDocumentId = userAccountDocumentId;                         
                          this.localStorageService.set(Key.DOCUMENTMASTERUSERID, this._verifiedUserAccountDocumentId);
-                         this.errorMessage.set("");
-                         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Welcome back!' });
+                         this.messageService.add({ severity: 'success', summary: 'Login Successful!', detail: 'Welcome back.' });
                     } 
                     else {    
-                         this.errorMessage.set("Invalid username or password!");
+                         this.messageService.add({ severity: 'error', summary: 'Login Failed!', detail: 'Invalid username or password.' });
                     }
                }),
                finalize(() => {

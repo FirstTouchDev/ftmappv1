@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../root/services/firebase.service';
 import { signal } from '@angular/core';
 import { tap, finalize } from 'rxjs';
-import { User, UserAccounts } from '../root/constants/user.model';
+import { GENDERS, GenderOption, GenderList } from '../root/constants/user.model';
 import { Collection } from '../root/constants/firebase';
 import { LocalStorageService } from '../root/services/local-storage.service';
 import { Key } from '../root/constants/local-storage';
@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 import { StepperModule } from 'primeng/stepper';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule} from 'primeng/inputicon';
+import { InputIconModule } from 'primeng/inputicon';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -38,10 +38,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
      imports: [
           ConfirmDialogModule,
           CheckboxModule,
+
           MessageModule,
           ToastModule,
-          CommonModule, 
-          FormsModule, 
+          CommonModule,
+          FormsModule,
           FloatLabelModule,
           InputTextModule,
           PasswordModule,
@@ -63,82 +64,82 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 export class SignUpComponent implements OnInit {
 
-     
-
-     private _verifiedUserAccountDocumentId: string | null = null;
-
-     protected isLoading = signal<boolean>(false);
-     protected displayEye = signal<boolean>(false);
-     protected errorMessage = signal<string>('');
      protected agreedToDisclaimerMessage = signal<boolean>(false);
-     phonenumber: number | null = null;
+     protected isLoggingIn = signal<boolean>(false);
+     protected activeStep: number = 1;
+
+     protected firstName: string = '';
+     protected middleName: string = '';
+     protected lastName: string = '';
+     protected selectedGender: GenderOption | null = null;
+     protected genders: GenderOption[] = [...GENDERS];
+     protected birthDate: Date | null = null;
+
+     protected address: string = '';
+     protected phoneNumber: number | null = null;
+     protected invitedBy: string = '';
+     protected emailAddress: string = '';
+     protected joinDate: Date | null = null;
+
      protected username: string = '';
      protected password: string = '';
-     protected isLoggingIn = signal<boolean>(false);
-     genders = [
-          { name: 'Male', value: 'male' },
-          { name: 'Female', value: 'female' }
-        ];
+     protected repeatPassword: string = '';
+     protected recoveryEmail: string = '';
 
-        selectedGender: any;
+     protected personalDataErrorCount = signal<number>(0);
+     protected personalDataErrorMessage = signal<string>('Please check these following errors: ');
 
-    
+
+
+
      constructor(
           private firebaseService: FirebaseService,
           private localStorageService: LocalStorageService,
           private formBuilder: FormBuilder,
           private messageService: MessageService,
           private confirmationService: ConfirmationService
-          
+
      ) {
-          this._verifiedUserAccountDocumentId = this.localStorageService.get(Key.DOCUMENTMASTERUSERID) ? this.localStorageService.get(Key.DOCUMENTMASTERUSERID) : null;
+
      }
 
      ngOnInit() {
 
-      }
-
-     
-
-     activeStep: number = 1;
-
-     
-     public onLogin(){
-          this.isLoggingIn.set(true);
-          this.firebaseService.adminVerifyUserCredentials$(this.username, this.password).pipe(
-               tap((userAccountDocumentId) => {
-                    if (userAccountDocumentId){
-                         this._verifiedUserAccountDocumentId = userAccountDocumentId;                         
-                         this.localStorageService.set(Key.DOCUMENTMASTERUSERID, this._verifiedUserAccountDocumentId);
-                         this.errorMessage.set("");
-                         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Welcome back!' });
-                    } 
-                    else {    
-                         this.errorMessage.set("Invalid username or password!");
-                         
-                         // //this.ionicAlertService.presentAlert('Oops', 'User not found.');
-                    }
-               }),
-               finalize(() => {
-                    this.isLoggingIn.set(false);
-               })
-          ).subscribe();
      }
 
-     confirm() {
-          this.confirmationService.confirm({
-              header: 'Info',
-              message: 'An email will be sent to you once the account is ready to use.',
-              accept: () => {
-                  //this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-              },
-              reject: () => {
-                  //this.messageService.add({ severity: 'info', summary: 'Rejected', detail: 'You have rejected' });
-              },
-          });
-      }
+     public checkUserPersonalData(activateCallback: (index: number) => void) {
+          const validations: { field: any; message: string }[] = [
+               { field: this.firstName, message: 'First name field is required.' },
+               { field: this.lastName, message: 'Last name field is required.' },
+               { field: this.selectedGender, message: 'Gender field is required.' },
+               { field: this.birthDate, message: 'Birthdate field is required.' },
+          ];
 
-     ngOnDestroy(){
+          let errorCount = 0;
+          let errorMessage = 'Please check the following errors: ';
+
+          validations.forEach(validation => {
+               if (!validation.field) {
+                    errorCount++;
+                    errorMessage += `${validation.message} `;
+               }
+          });
+
+          this.personalDataErrorCount.set(errorCount);
+          this.personalDataErrorMessage.set(errorMessage);
+
+          console.log("personalDataErrorMessage", this.personalDataErrorMessage());
+          console.log("personalDataErrorCount", this.personalDataErrorCount());
+
+          if (errorCount === 0) {
+               activateCallback(2);
+          }
+     }
+
+
+
+
+     ngOnDestroy() {
           this.agreedToDisclaimerMessage.set(false);
      }
 

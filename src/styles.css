@@ -1,31 +1,48 @@
-
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
+
 :root {
-     --font-family: 'Inter', sans-serif;
+	--font-family: 'Inter', sans-serif;
 }
+
+.fixed-logo-watermark {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 0.03;
+	z-index: 0;
+	pointer-events: none;
+	width: 800px;
+	max-width: 2000px;
+}
+
+.fixed-logo-watermark img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
 
 body {
-     font-family: var(--font-family);
+	font-family: var(--font-family);
 }
+
 /* Adjust toast max-width */
 .p-toast {
-     max-width: 400px;
-     width: 100%;
-     margin: 0 auto;
-   }
-   
-   @media screen and (max-width: 920px) {
-     .p-toast {
-       padding: 0px 20px 20px 20px;
-       left: 0;
-       right: 0;
-     }
-   
-     .p-toast-message {
-       width: 100%;
-     }
+	max-width: 400px;
+	width: 100%;
+	margin: 0 auto;
 }
-   
 
-   
+@media screen and (max-width: 920px) {
+	.p-toast {
+		padding: 0px 20px 20px 20px;
+		left: 0;
+		right: 0;
+	}
+
+	.p-toast-message {
+		width: 100%;
+	}
+}

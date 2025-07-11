@@ -1,17 +1,13 @@
 {
-     "hosting": {
-       "public": "dist/ftmapp/browser",
-       "ignore": [
-         "firebase.json",
-         "**/.*",
-         "**/node_modules/**"
-       ],
-       "rewrites": [
-         {
-           "source": "**",
-           "destination": "/index.html"
-         }
-       ]
-     }
-   }
-   
+  "hosting": {
+    "public": "dist/ftmapp/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}

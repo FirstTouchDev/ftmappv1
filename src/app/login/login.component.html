@@ -1,14 +1,18 @@
-
+<p-toast [position]="'top-center'"></p-toast>
 <div class="login-container">
-    
+    <div class="fixed-logo-watermark">
+  <img src="../ftmlogos/ftm_logo_color_only.png" alt="FTM Logo" />
+</div>
      <div class="login-form">
-          <p-toast [position]="'top-center'"></p-toast>
+          <div style="display: flex; justify-content: center; align-items: center;">
+               <img src="../ftmlogos/ftm_logo_color_only.png" style="height: 50%; width: 50%;" />
+          </div>
+         
           <div class="head-details">
                <p style="font-size: 32px; font-weight: 800;">Login</p>
                <br>
                <p style="font-weight: 200;">Please login to continue.</p>
           </div>
-          <p-message *ngIf="errorMessage()" severity="error">{{ errorMessage() }} </p-message>
           <div class="fields">     
                 <p-floatlabel variant="on">
                     <input pInputText inputId="username" [(ngModel)]="username" autocomplete="off" fluid/>

@@ -1,12 +1,17 @@
+<p-toast [position]="'top-center'"></p-toast>
 <div class="login-container">
+     <div class="fixed-logo-watermark">
+  <img src="../ftmlogos/ftm_logo_color_only.png" alt="FTM Logo" />
+</div>
      <div class="login-form">
-
-          <p-toast [position]="'top-center'">
-          </p-toast>
+          <div style="display: flex; justify-content: center; align-items: center;">
+               <img src="../ftmlogos/ftm_logo_color_only.png" style="height: 50%; width: 50%;" />
+          </div>
           <p style="font-size: 32px; font-weight: 800; text-align: center;">Sign Up</p>
-          <div *ngIf="!agreedToDisclaimerMessage()" class="discliamerMessage">
+          <div *ngIf="!agreedToDisclaimerMessage()">
+               
                <div class="head-details">
-                    <br>
+                     
                     <p style="font-weight: 200;">By signing up, you agree to provide personal information such as your
                          name
                          and contact details, which are necessary to create and manage your account. Rest assured, all
@@ -79,38 +84,42 @@
                                    <ng-template #content let-activateCallback="activateCallback">
                                         <div class="flex flex-col gap-2 mx-auto">
                                              <p class="text-center mb-3 mt-1">Personal Details</p>
+                                             <div *ngIf="personalDataErrorCount() > 0">
+                                                  <p-message severity="error">{{ personalDataErrorMessage() }}</p-message>
+                                             </div>
+
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <input pInputText inputId="firstName" [(ngModel)]="firstName"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">First Name</label>
+                                                  <label for="firstName">First Name</label>
                                              </p-floatlabel>
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <input pInputText inputId="middleName" [(ngModel)]="middleName"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">Middle Name</label>
+                                                  <label for="middleName">Middle Name</label>
                                              </p-floatlabel>
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <input pInputText inputId="lastName" [(ngModel)]="lastName"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">Last Name</label>
+                                                  <label for="lastName">Last Name</label>
                                              </p-floatlabel>
                                              <p-floatLabel variant="on">
                                                   <p-dropdown [options]="genders" [(ngModel)]="selectedGender"
-                                                       optionLabel="name" inputId="float-label" fluid />
-                                                  <label for="float-label">Gender</label>
+                                                       optionLabel="name" inputId="gender" fluid />
+                                                  <label for="gender">Gender</label>
                                              </p-floatLabel>
 
                                              <p-floatlabel variant="on">
-                                                  <p-datepicker [(ngModel)]="username" inputId="birthdate" showIcon
+                                                  <p-datepicker [(ngModel)]="birthDate" inputId="birthDate" showIcon
                                                        iconDisplay="input" fluid />
-                                                  <label for="birthdate">Birthdate</label>
+                                                  <label for="birthDate">Birthdate</label>
                                              </p-floatlabel>
 
 
 
                                         </div>
                                         <div class=" pt-6">
-                                             <p-button (onClick)="activateCallback(2)" label="Continue"
+                                             <p-button (click)="checkUserPersonalData(activateCallback)" label="Continue"
                                                   icon="pi pi-arrow-right" iconPos="right" fluid />
                                              <p-button label="Login" severity="secondary" [routerLink]="'/login'"
                                                   icon="pi pi-arrow-left" iconPos="left"
@@ -124,31 +133,31 @@
                                         <div class="flex flex-col gap-2 mx-auto">
                                              <p class="text-center mb-3 mt-1">Other Details</p>
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <input pInputText inputId="address" [(ngModel)]="address"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">Address</label>
+                                                  <label for="address">Address</label>
                                              </p-floatlabel>
                                              <p-floatlabel variant="on">
-                                                  <p-inputnumber [(ngModel)]="phonenumber" inputId="phoneNumber"
+                                                  <p-inputnumber [(ngModel)]="phoneNumber" inputId="phoneNumber"
                                                        fluid />
                                                   <label for="phoneNumber">Phone Number</label>
                                              </p-floatlabel>
 
 
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <input pInputText inputId="invitedBy" [(ngModel)]="invitedBy"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">Invited by</label>
+                                                  <label for="invitedBy">Invited by</label>
                                              </p-floatlabel>
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <input pInputText inputId="emailAddress" [(ngModel)]="emailAddress"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">Email Address</label>
+                                                  <label for="emailAddress">Email Address</label>
                                              </p-floatlabel>
                                              <p-floatlabel variant="on">
-                                                  <p-datepicker [(ngModel)]="username" inputId="birthdate" showIcon
+                                                  <p-datepicker [(ngModel)]="joinDate" inputId="joinDate" showIcon
                                                        iconDisplay="input" fluid />
-                                                  <label for="birthdate">Join Date</label>
+                                                  <label for="joinDate">Join Date</label>
                                              </p-floatlabel>
 
 
@@ -178,27 +187,24 @@
                                                        autocomplete="off" fluid />
                                                   <label for="username">Username</label>
                                              </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <p-inputnumber [(ngModel)]="phonenumber" inputId="phoneNumber"
-                                                       fluid />
-                                                  <label for="phoneNumber">Password</label>
-                                             </p-floatlabel>
-
 
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
-                                                       autocomplete="off" fluid />
-                                                  <label for="username">Repeat Password</label>
+                                                  <p-password [(ngModel)]="password" inputId="password" [feedback]="false" [toggleMask]="true" fluid/>
+                                                  <label for="password">Password</label>
                                              </p-floatlabel>
                                              <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                  <p-password [(ngModel)]="repeatPassword" inputId="repeatPassword" [feedback]="false" [toggleMask]="true" fluid/>
+                                                  <label for="repeatPassword">Repeat Password</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="recoveryEmail" [(ngModel)]="recoveryEmail"
                                                        autocomplete="off" fluid />
-                                                  <label for="username">Recovery Email</label>
+                                                  <label for="recoveryEmail">Recovery Email</label>
                                              </p-floatlabel>
                                         </div>
                                         <div class=" pt-6">
                                             
-                                             <p-button (click)="confirm()" label="Submit" icon="pi pi-check"
+                                             <p-button  label="Submit" icon="pi pi-check"
                                                   iconPos="right" fluid />
                                              <p-button (click)="activateCallback(2)" label="Other Details"
                                                   severity="secondary" icon="pi pi-arrow-left" iconPos="left"
