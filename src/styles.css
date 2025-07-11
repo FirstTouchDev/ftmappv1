@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+:root {
+     --font-family: 'Inter', sans-serif;
+}
+
+body {
+     font-family: var(--font-family);
+}
+/* Adjust toast max-width */
+.p-toast {
+     max-width: 400px;
+     width: 100%;
+     margin: 0 auto;
+   }
+   
+   @media screen and (max-width: 920px) {
+     .p-toast {
+       padding: 0px 20px 20px 20px;
+       left: 0;
+       right: 0;
+     }
+   
+     .p-toast-message {
+       width: 100%;
+     }
+}
+   
+
+   

@@ -1,0 +1,64 @@
+
+
+.login-container {
+     height: 80vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     padding: 1rem;
+}
+
+/* Login Form */
+.login-form {
+     background: #fff;
+     padding: 2rem;
+     // border-radius: 12px;
+     // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     width: 100%;
+     max-width: 400px;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+}
+
+.forgot-password {
+     display: flex;
+     justify-content: flex-end;
+     margin-top: 12px;
+}
+
+.fields{
+     margin-top: 12px;
+}
+
+// .action-buttons{
+//      margin-top: px;
+// }
+
+.head-details {
+     text-align: center;
+     padding-top: 10px 10px;
+}
+
+.create-an-account .account-row {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 480px) {
+     .login-form {
+          padding: 1.5rem;
+          gap: 0.8rem;
+     }
+
+     .login-form h2 {
+          font-size: 1.5rem;
+     }
+
+     .login-form input,
+     .login-form button {
+          font-size: 0.95rem;
+     }
+}

@@ -1,0 +1,42 @@
+
+<div class="login-container">
+    
+     <div class="login-form">
+          <p-toast [position]="'top-center'"></p-toast>
+          <div class="head-details">
+               <p style="font-size: 32px; font-weight: 800;">Login</p>
+               <br>
+               <p style="font-weight: 200;">Please login to continue.</p>
+          </div>
+          <p-message *ngIf="errorMessage()" severity="error">{{ errorMessage() }} </p-message>
+          <div class="fields">     
+                <p-floatlabel variant="on">
+                    <input pInputText inputId="username" [(ngModel)]="username" autocomplete="off" fluid/>
+                    <label for="username">Username</label>
+                </p-floatlabel>
+                <br>
+                <p-floatlabel variant="on">
+                    <p-password [(ngModel)]="password" inputId="password" [feedback]="false" [toggleMask]="true" fluid/>
+                    <label for="password">Password</label>
+                </p-floatlabel>
+
+
+               <div class="forgot-password">
+                    <p-button label="Forgot Password?" variant="text" severity="secondary" />
+               </div> 
+          </div>
+          <div class="action-buttons">
+               <!-- <ion-button  expand="block" color="primary" [disabled]="!username || !password || isLoggingIn()">Login</ion-button> -->
+               <p-button  (click)="onLogin()" label="Login" [disabled]="!username || !password || isLoggingIn()" fluid />
+               
+          </div>
+          <div class="create-an-account">
+               <div class="account-row">
+                    <p>Don't have an account?</p>
+                    <p-button label="Sign Up!" variant="text" severity="info" [routerLink]="'/signup'"></p-button>
+               </div>
+          </div>
+           
+     </div>
+</div>
+

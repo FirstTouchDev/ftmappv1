@@ -1,0 +1,240 @@
+<div class="login-container">
+     <div class="login-form">
+
+          <p-toast [position]="'top-center'">
+          </p-toast>
+          <p style="font-size: 32px; font-weight: 800; text-align: center;">Sign Up</p>
+          <div *ngIf="!agreedToDisclaimerMessage()" class="discliamerMessage">
+               <div class="head-details">
+                    <br>
+                    <p style="font-weight: 200;">By signing up, you agree to provide personal information such as your
+                         name
+                         and contact details, which are necessary to create and manage your account. Rest assured, all
+                         information you share will be kept strictly confidential and will not be shared with third
+                         parties
+                         without your consent, in accordance with our privacy policy.</p>
+                    <p-button (click)="agreedToDisclaimerMessage.set(true)" label="Continue" fluid
+                         [style]="{ 'margin-top': '16px' }" />
+                    <p-button [routerLink]="'/login'" label="Login Instead" variant="text" severity="info" fluid
+                         [style]="{ 'margin-top': '8px' }" />
+               </div>
+          </div>
+
+          <div *ngIf="agreedToDisclaimerMessage()" class="signUpDisplay">
+               <div class="card flex justify-center">
+                    <p-stepper [(value)]="activeStep" class="basis-[40rem]">
+                         <p-step-list>
+                              <p-step [value]="1" class="flex flex-row flex-auto gap-2">
+                                   <ng-template #content let-activateCallback="activateCallback" let-value="value">
+                                        <button class="bg-transparent border-0 inline-flex flex-col gap-2"
+                                             (click)="activateCallback()">
+                                             <span class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+                                                  [ngStyle]="value <= activeStep ? {
+                                             backgroundColor: 'var(--p-button-primary-background)',
+                                             borderColor: 'var(--p-primary-500)',
+                                             color: 'var(--p-button-primary-color)'
+                                             } : null">
+                                                  <i class="pi pi-user" style="font-size: 1rem;"></i>
+                                             </span>
+                                        </button>
+                                   </ng-template>
+                              </p-step>
+
+                              <p-step [value]="2" class="flex flex-row flex-auto gap-2">
+                                   <ng-template #content let-activateCallback="activateCallback" let-value="value">
+                                        <button class="bg-transparent border-0 inline-flex flex-col gap-2"
+                                             (click)="activateCallback()">
+                                             <span class="rounded-full border-1 w-12 h-12 inline-flex items-center justify-center"
+                                                  [ngStyle]="value <= activeStep ? {
+                                             backgroundColor: 'var(--p-button-primary-background)',
+                                             borderColor: 'var(--p-primary-500)',
+                                             color: 'var(--p-button-primary-color)'
+                                             } : null
+                                             ">
+                                                  <i class="pi pi-address-book" style="font-size: 1rem;"></i>
+                                             </span>
+                                        </button>
+                                   </ng-template>
+                              </p-step>
+
+                              <p-step [value]="3" class="flex flex-row flex-auto gap-2">
+                                   <ng-template #content let-activateCallback="activateCallback" let-value="value">
+                                        <button class="bg-transparent border-0 inline-flex flex-col gap-2"
+                                             (click)="activateCallback()">
+                                             <span class="rounded-full border-1 w-12 h-12 inline-flex items-center justify-center"
+                                                  [ngStyle]="value <= activeStep ? {
+                                        backgroundColor: 'var(--p-button-primary-background)',
+                                        borderColor: 'var(--p-primary-500)',
+                                        color: 'var(--p-button-primary-color)'
+                                        } : null">
+                                                  <i class="pi pi-key" style="font-size: 1rem;"></i>
+                                             </span>
+                                        </button>
+                                   </ng-template>
+                              </p-step>
+                         </p-step-list>
+
+                         <p-step-panels>
+                              <p-step-panel [value]="1">
+                                   <ng-template #content let-activateCallback="activateCallback">
+                                        <div class="flex flex-col gap-2 mx-auto">
+                                             <p class="text-center mb-3 mt-1">Personal Details</p>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">First Name</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Middle Name</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Last Name</label>
+                                             </p-floatlabel>
+                                             <p-floatLabel variant="on">
+                                                  <p-dropdown [options]="genders" [(ngModel)]="selectedGender"
+                                                       optionLabel="name" inputId="float-label" fluid />
+                                                  <label for="float-label">Gender</label>
+                                             </p-floatLabel>
+
+                                             <p-floatlabel variant="on">
+                                                  <p-datepicker [(ngModel)]="username" inputId="birthdate" showIcon
+                                                       iconDisplay="input" fluid />
+                                                  <label for="birthdate">Birthdate</label>
+                                             </p-floatlabel>
+
+
+
+                                        </div>
+                                        <div class=" pt-6">
+                                             <p-button (onClick)="activateCallback(2)" label="Continue"
+                                                  icon="pi pi-arrow-right" iconPos="right" fluid />
+                                             <p-button label="Login" severity="secondary" [routerLink]="'/login'"
+                                                  icon="pi pi-arrow-left" iconPos="left"
+                                                  [style]="{ 'margin-top': '8px' }" fluid />
+                                        </div>
+                                   </ng-template>
+                              </p-step-panel>
+
+                              <p-step-panel [value]="2">
+                                   <ng-template #content let-activateCallback="activateCallback">
+                                        <div class="flex flex-col gap-2 mx-auto">
+                                             <p class="text-center mb-3 mt-1">Other Details</p>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Address</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <p-inputnumber [(ngModel)]="phonenumber" inputId="phoneNumber"
+                                                       fluid />
+                                                  <label for="phoneNumber">Phone Number</label>
+                                             </p-floatlabel>
+
+
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Invited by</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Email Address</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <p-datepicker [(ngModel)]="username" inputId="birthdate" showIcon
+                                                       iconDisplay="input" fluid />
+                                                  <label for="birthdate">Join Date</label>
+                                             </p-floatlabel>
+
+
+
+                                        </div>
+                                        <div class=" pt-6">
+                                             <p-button (onClick)="activateCallback(3)" label="Continue"
+                                                  icon="pi pi-arrow-right" iconPos="right" fluid />
+                                             <p-button (click)="activateCallback(1)" label="Personal Details"
+                                                  severity="secondary" icon="pi pi-arrow-left" iconPos="left"
+                                                  [style]="{ 'margin-top': '8px' }" fluid />
+                                        </div>
+                                   </ng-template>
+                              </p-step-panel>
+
+                              <p-step-panel [value]="3">
+                                   <ng-template #content let-activateCallback="activateCallback">
+                                        <div class="flex flex-col gap-2 mx-auto">
+                                             <p class="text-center mb-1 mt-1">Account Details</p>
+                                             <p class="text-center mb-2 text-sm"
+                                                  [ngStyle]="{ color: 'var(--p-button-danger-background)' }">
+                                                  Make sure to remember your username and password.
+                                             </p>
+
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Username</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <p-inputnumber [(ngModel)]="phonenumber" inputId="phoneNumber"
+                                                       fluid />
+                                                  <label for="phoneNumber">Password</label>
+                                             </p-floatlabel>
+
+
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Repeat Password</label>
+                                             </p-floatlabel>
+                                             <p-floatlabel variant="on">
+                                                  <input pInputText inputId="username" [(ngModel)]="username"
+                                                       autocomplete="off" fluid />
+                                                  <label for="username">Recovery Email</label>
+                                             </p-floatlabel>
+                                        </div>
+                                        <div class=" pt-6">
+                                            
+                                             <p-button (click)="confirm()" label="Submit" icon="pi pi-check"
+                                                  iconPos="right" fluid />
+                                             <p-button (click)="activateCallback(2)" label="Other Details"
+                                                  severity="secondary" icon="pi pi-arrow-left" iconPos="left"
+                                                  [style]="{ 'margin-top': '8px' }" fluid />
+                                        </div>
+                                   </ng-template>
+
+                              </p-step-panel>
+                         </p-step-panels>
+                    </p-stepper>
+               </div>
+          </div>
+
+     </div>
+
+     <div class="card flex justify-center">
+          <p-toast />
+          <p-confirmdialog #cd>
+               <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
+                    <div class="flex flex-col items-center p-8 bg-surface-0 dark:bg-surface-900 rounded">
+                         <div class="rounded-full bg-primary text-primary-contrast inline-flex justify-center items-center h-24 w-24 -mt-20"
+                              [ngStyle]="{ color: 'var(--p-button-primary-color)', backgroundColor: 'var(--p-button-primary-background)' }">
+                              <i class="pi pi-info !text-5xl"></i>
+                         </div>
+                         <span class="font-bold text-2xl block mb-2 mt-6">{{ message.header }}</span>
+                         <p class="mb-0">{{ message.message }}</p>
+                         <div class="flex items-center gap-2 mt-6">
+                              
+                              <p-button label="Cancel" [outlined]="true" (onClick)="onReject()"
+                                   styleClass="w-32"></p-button>
+                                   <p-button label="OK" (onClick)="onAccept()" styleClass="w-32"></p-button>
+                         </div>
+                    </div>
+               </ng-template>
+          </p-confirmdialog>
+     </div>
+
+
+</div>
