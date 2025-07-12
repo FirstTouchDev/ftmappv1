@@ -1,0 +1,20 @@
+<p-confirmdialog #cd>
+     <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
+          <div class="px-5">
+               <div class="flex flex-col items-center p-5 bg-surface-0 dark:bg-surface-900 rounded w-full max-w-[300px] sm:max-w-[400px] mx-auto">
+                    <div class="rounded-full inline-flex justify-center items-center h-24 w-24 -mt-20"
+                         [ngStyle]="{ color: iconColor, backgroundColor: iconBgColor }">
+                         <i [class]="icon + ' !text-5xl'"></i>
+                    </div>
+                    <span class="font-bold text-2xl block mb-2 mt-6">{{ message.header }}</span>
+                    <p class="mb-0 text-center">{{ message.message }}</p>
+                    <div class="flex items-center gap-2 mt-6">
+                         <ng-container *ngFor="let btn of buttons">
+                              <p-button [label]="btn.label" (onClick)="btn.action()"
+                                   [styleClass]="btn.styleClass || 'w-32'"></p-button>
+                         </ng-container>
+                    </div>
+               </div>
+          </div>
+     </ng-template>
+</p-confirmdialog>

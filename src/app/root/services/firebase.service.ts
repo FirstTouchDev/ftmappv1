@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, doc, updateDoc, UpdateData, getDoc, query, where, getDocs, CollectionReference, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, updateDoc, UpdateData, getDoc, query, where, getDocs, CollectionReference, deleteDoc, limit } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { from, map, catchError } from 'rxjs';
 import { DocumentReference } from '@angular/fire/firestore';
 import { DocumentData } from '@angular/fire/compat/firestore';
 import { Collection, Field, Operators } from '../constants/firebase';
-import { User } from '../constants/user.model';
+import { User } from '../models/user.model';
 import { throwError } from 'rxjs';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs';
@@ -66,6 +66,23 @@ export class FirebaseService {
           );
      }
 
+     public adminGetDataByField$<T>(targetCollection: string, field: string, value: any): Observable<T | null> {
+          const collectionRef = collection(this.firestore, targetCollection);
+          const queryRef = query(collectionRef, where(field, '==', value), limit(1));
+
+          return from(getDocs(queryRef)).pipe(
+               map((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                         const docSnap = querySnapshot.docs[0];
+                         const data = docSnap.data() as T;
+                         return { ...data, id: docSnap.id } as T;
+                    } else {
+                         return null;
+                    }
+               }),
+               catchError((err) => throwError(() => err))
+          );
+     }
 
 
      public adminUpdateData$<T extends DocumentData>(targetCollection: string, id: string, data: UpdateData<T>): Observable<boolean> {
@@ -88,11 +105,22 @@ export class FirebaseService {
                     if (data.exists()) {
                          return from(deleteDoc(docRef)).pipe(map(() => true));
                     } else {
-                         console.warn(`⚠️ Document with ID ${docId} does not exist in ${targetCollection}`);
                          return of(false);
                     }
                }),
                catchError((err) => throwError(() => err))
+          );
+     }
+
+     public adminCheckDoesDataExist$(targetCollection: string, fieldName: string, value: any): Observable<boolean> {
+          const colRef = collection(this.firestore, targetCollection) as CollectionReference<DocumentData>;
+          const q = query(colRef, where(fieldName, Operators.ISEQUALTO, value));
+          return from(getDocs(q)).pipe(
+               map(snapshot => !snapshot.empty),
+               catchError(err => {
+                    console.error(`Error checking value in ${targetCollection}.${fieldName}:`, err);
+                    return of(false);
+               })
           );
      }
 }

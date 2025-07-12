@@ -1,11 +1,12 @@
 <p-toast [position]="'top-center'"></p-toast>
+<prime-ng-dialog #primeNgDialog></prime-ng-dialog>
 <div class="login-container">
      <div class="fixed-logo-watermark">
   <img src="../ftmlogos/ftm_logo_color_only.png" alt="FTM Logo" />
 </div>
      <div class="login-form">
           <div style="display: flex; justify-content: center; align-items: center;">
-               <img src="../ftmlogos/ftm_logo_color_only.png" style="height: 50%; width: 50%;" />
+               <img src="../ftmlogos/ftm_logo_color_only.png" style="height: auto; width: 168px;" />
           </div>
           <p style="font-size: 32px; font-weight: 800; text-align: center;">Sign Up</p>
           <div *ngIf="!agreedToDisclaimerMessage()">
@@ -84,47 +85,62 @@
                                    <ng-template #content let-activateCallback="activateCallback">
                                         <div class="flex flex-col gap-2 mx-auto">
                                              <p class="text-center mb-3 mt-1">Personal Details</p>
-                                             <div *ngIf="personalDataErrorCount() > 0">
-                                                  <p-message severity="error">{{ personalDataErrorMessage() }}</p-message>
+                                             <div class="card flex justify-center">
+                                                  <form [formGroup]="personalDataForm" (ngSubmit)="onSubmitPersonalDataForm(activateCallback)" class="flex flex-col gap-4 w-full">                                             
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                              <input pInputText inputId="firstName" formControlName="firstName" autocomplete="off" fluid />
+                                                              <label for="firstName">First Name</label>
+                                                            </p-floatlabel>
+                                                            @if (isInvalid('firstName', personalDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">First name is required.</p-message>
+                                                            }
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <input pInputText inputId="middleName" formControlName="middleName"
+                                                                      autocomplete="off" fluid />
+                                                                 <label for="middleName">Middle Name</label>
+                                                            </p-floatlabel>
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <input pInputText inputId="lastName" formControlName="lastName"
+                                                                      autocomplete="off" fluid />
+                                                                 <label for="lastName">Last Name</label>
+                                                            </p-floatlabel>
+                                                            @if (isInvalid('lastName', personalDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">Last name is required.</p-message>
+                                                            }
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatLabel variant="on">
+                                                                 <p-dropdown [options]="genders" formControlName="gender"
+                                                                      optionLabel="name" inputId="gender" fluid />
+                                                                 <label for="gender">Gender</label>
+                                                            </p-floatLabel>
+                                                            @if (isInvalid('gender', personalDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">Gender is required.</p-message>
+                                                            }
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <p-datepicker formControlName="birthDate" inputId="birthDate" showIcon
+                                                                      iconDisplay="input" fluid />
+                                                                 <label for="birthDate">Birthdate</label>
+                                                            </p-floatlabel>
+                                                            @if (isInvalid('birthDate', personalDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">Birthdate is required.</p-message>
+                                                            }
+                                                       </div>    
+                                                       <div class=" pt-6">
+                                                            <button pButton type="submit" label="Continue" icon="pi pi-arrow-right" iconPos="right" severity="primary" fluid></button>
+                                                            <p-button label="Login" severity="secondary" [routerLink]="'/login'" icon="pi pi-arrow-left" iconPos="left" [style]="{ 'margin-top': '8px' }" fluid />
+                                                       </div>
+                                                  </form>                                          
                                              </div>
-
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="firstName" [(ngModel)]="firstName"
-                                                       autocomplete="off" fluid />
-                                                  <label for="firstName">First Name</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="middleName" [(ngModel)]="middleName"
-                                                       autocomplete="off" fluid />
-                                                  <label for="middleName">Middle Name</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="lastName" [(ngModel)]="lastName"
-                                                       autocomplete="off" fluid />
-                                                  <label for="lastName">Last Name</label>
-                                             </p-floatlabel>
-                                             <p-floatLabel variant="on">
-                                                  <p-dropdown [options]="genders" [(ngModel)]="selectedGender"
-                                                       optionLabel="name" inputId="gender" fluid />
-                                                  <label for="gender">Gender</label>
-                                             </p-floatLabel>
-
-                                             <p-floatlabel variant="on">
-                                                  <p-datepicker [(ngModel)]="birthDate" inputId="birthDate" showIcon
-                                                       iconDisplay="input" fluid />
-                                                  <label for="birthDate">Birthdate</label>
-                                             </p-floatlabel>
-
-
-
                                         </div>
-                                        <div class=" pt-6">
-                                             <p-button (click)="checkUserPersonalData(activateCallback)" label="Continue"
-                                                  icon="pi pi-arrow-right" iconPos="right" fluid />
-                                             <p-button label="Login" severity="secondary" [routerLink]="'/login'"
-                                                  icon="pi pi-arrow-left" iconPos="left"
-                                                  [style]="{ 'margin-top': '8px' }" fluid />
-                                        </div>
+                                       
                                    </ng-template>
                               </p-step-panel>
 
@@ -132,44 +148,62 @@
                                    <ng-template #content let-activateCallback="activateCallback">
                                         <div class="flex flex-col gap-2 mx-auto">
                                              <p class="text-center mb-3 mt-1">Other Details</p>
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="address" [(ngModel)]="address"
-                                                       autocomplete="off" fluid />
-                                                  <label for="address">Address</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <p-inputnumber [(ngModel)]="phoneNumber" inputId="phoneNumber"
-                                                       fluid />
-                                                  <label for="phoneNumber">Phone Number</label>
-                                             </p-floatlabel>
-
-
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="invitedBy" [(ngModel)]="invitedBy"
-                                                       autocomplete="off" fluid />
-                                                  <label for="invitedBy">Invited by</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="emailAddress" [(ngModel)]="emailAddress"
-                                                       autocomplete="off" fluid />
-                                                  <label for="emailAddress">Email Address</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <p-datepicker [(ngModel)]="joinDate" inputId="joinDate" showIcon
-                                                       iconDisplay="input" fluid />
-                                                  <label for="joinDate">Join Date</label>
-                                             </p-floatlabel>
-
-
-
+                                             <div class="card flex justify-center">
+                                                       <form [formGroup]="otherDataForm" (ngSubmit)="onSubmitOtherDataForm(activateCallback)" class="flex flex-col gap-4 w-full">                                             
+                                                            <div class="flex flex-col gap-1">
+                                                                 <p-floatlabel variant="on">
+                                                                      <input pInputText inputId="address" formControlName="address"
+                                                                           autocomplete="off" fluid />
+                                                                      <label for="address">Address</label>
+                                                                 </p-floatlabel>
+                                                                 @if (isInvalid('address', otherDataForm)) {
+                                                                      <p-message severity="error" size="small" variant="simple">Address is required.</p-message>
+                                                                 }
+                                                            </div>
+                                                            <div class="flex flex-col gap-1">
+                                                                 <p-floatlabel variant="on">
+                                                                      <p-inputnumber formControlName="phoneNumber" inputId="phoneNumber"
+                                                                           fluid />
+                                                                      <label for="phoneNumber">Phone Number</label>
+                                                                 </p-floatlabel>
+                                                            </div>
+                                                            <div class="flex flex-col gap-1">
+                                                                 <p-floatlabel variant="on">
+                                                                      <input pInputText inputId="invitedBy" formControlName="invitedBy"
+                                                                           autocomplete="off" fluid />
+                                                                      <label for="invitedBy">Invited by</label>
+                                                                 </p-floatlabel>
+                                                            </div>
+                                                            <div class="flex flex-col gap-1">
+                                                                 <p-floatlabel variant="on">
+                                                                      <input pInputText inputId="emailAddress" formControlName="emailAddress"
+                                                                           autocomplete="off" fluid />
+                                                                      <label for="emailAddress">Email Address</label>
+                                                                 </p-floatlabel>
+                                                                 @if (isInvalid('emailAddress', otherDataForm)) {
+                                                                      @if (otherDataForm.get('emailAddress')?.errors?.['required']) {
+                                                                          <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+                                                                      }
+                                                                      @if (otherDataForm.get('emailAddress')?.errors?.['email']) {
+                                                                          <p-message severity="error" size="small" variant="simple">Please enter a valid email.</p-message>
+                                                                      }
+                                                                  }
+                                                            </div>
+                                                            <div class="flex flex-col gap-1">
+                                                                 <p-floatlabel variant="on">
+                                                                      <p-datepicker formControlName="joinDate" inputId="joinDate" showIcon
+                                                                           iconDisplay="input" fluid />
+                                                                      <label for="joinDate">Join Date</label>
+                                                                 </p-floatlabel>
+                                                            </div>
+                                                            <div class=" pt-6">
+                                                                 <button pButton type="submit" label="Continue" icon="pi pi-arrow-right" iconPos="right" severity="primary" fluid></button>
+                                                                 <p-button (click)="activateCallback(1)" label="Personal Details" severity="secondary" icon="pi pi-arrow-left" iconPos="left" [style]="{ 'margin-top': '8px' }" fluid />
+                                                       </div>
+                                                       </form>
+                                             </div>
                                         </div>
-                                        <div class=" pt-6">
-                                             <p-button (onClick)="activateCallback(3)" label="Continue"
-                                                  icon="pi pi-arrow-right" iconPos="right" fluid />
-                                             <p-button (click)="activateCallback(1)" label="Personal Details"
-                                                  severity="secondary" icon="pi pi-arrow-left" iconPos="left"
-                                                  [style]="{ 'margin-top': '8px' }" fluid />
-                                        </div>
+                                        
                                    </ng-template>
                               </p-step-panel>
 
@@ -181,34 +215,59 @@
                                                   [ngStyle]="{ color: 'var(--p-button-danger-background)' }">
                                                   Make sure to remember your username and password.
                                              </p>
-
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="username" [(ngModel)]="username"
-                                                       autocomplete="off" fluid />
-                                                  <label for="username">Username</label>
-                                             </p-floatlabel>
-
-                                             <p-floatlabel variant="on">
-                                                  <p-password [(ngModel)]="password" inputId="password" [feedback]="false" [toggleMask]="true" fluid/>
-                                                  <label for="password">Password</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <p-password [(ngModel)]="repeatPassword" inputId="repeatPassword" [feedback]="false" [toggleMask]="true" fluid/>
-                                                  <label for="repeatPassword">Repeat Password</label>
-                                             </p-floatlabel>
-                                             <p-floatlabel variant="on">
-                                                  <input pInputText inputId="recoveryEmail" [(ngModel)]="recoveryEmail"
-                                                       autocomplete="off" fluid />
-                                                  <label for="recoveryEmail">Recovery Email</label>
-                                             </p-floatlabel>
-                                        </div>
-                                        <div class=" pt-6">
-                                            
-                                             <p-button  label="Submit" icon="pi pi-check"
-                                                  iconPos="right" fluid />
-                                             <p-button (click)="activateCallback(2)" label="Other Details"
-                                                  severity="secondary" icon="pi pi-arrow-left" iconPos="left"
-                                                  [style]="{ 'margin-top': '8px' }" fluid />
+                                             <div class="card flex justify-center">
+                                                  <form [formGroup]="accountDataForm" (ngSubmit)="onSubmitAccountDataForm(activateCallback)" class="flex flex-col gap-4 w-full">                                             
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <input pInputText inputId="username" formControlName="username"
+                                                                      autocomplete="off" fluid />
+                                                                 <label for="username">Username</label>
+                                                            </p-floatlabel>
+                                                            <p-message *ngIf="customeUsernameErrorMessage()"  severity="error" size="small" variant="simple">{{ customeUsernameErrorMessage() }}</p-message>
+                                                            @if (isInvalid('username', accountDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">Username is required.</p-message>
+                                                            }
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <p-password formControlName="password" inputId="password" [feedback]="false" [toggleMask]="true" fluid/>
+                                                                 <label for="password">Password</label>
+                                                            </p-floatlabel>
+                                                            @if (isInvalid('password', accountDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">Password is required.</p-message>
+                                                            }
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <p-password formControlName="repeatPassword" inputId="repeatPassword" [feedback]="false" [toggleMask]="true" fluid/>
+                                                                 <label for="repeatPassword">Repeat Password</label>
+                                                            </p-floatlabel>
+                                                            <p-message *ngIf="customPasswordErrorMessage()"  severity="error" size="small" variant="simple">{{ customPasswordErrorMessage() }}</p-message>
+                                                            @if (isInvalid('repeatPassword', accountDataForm)) {
+                                                                 <p-message severity="error" size="small" variant="simple">Kindly repeat your password.</p-message>
+                                                            }
+                                                       </div>
+                                                       <div class="flex flex-col gap-1">
+                                                            <p-floatlabel variant="on">
+                                                                 <input pInputText inputId="recoveryEmail" formControlName="recoveryEmail"
+                                                                      autocomplete="off" fluid />
+                                                                 <label for="recoveryEmail">Recovery Email</label>
+                                                            </p-floatlabel>
+                                                            @if (isInvalid('recoveryEmail', accountDataForm)) {
+                                                                 @if (accountDataForm.get('recoveryEmail')?.errors?.['required']) {
+                                                                     <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+                                                                 }
+                                                                 @if (accountDataForm.get('recoveryEmail')?.errors?.['email']) {
+                                                                     <p-message severity="error" size="small" variant="simple">Please enter a valid email.</p-message>
+                                                                 }
+                                                             }
+                                                       </div>
+                                                       <div class=" pt-6">
+                                                            <button pButton type="submit" label="Submit" icon="pi pi-arrow-right" iconPos="right" severity="primary" fluid [disabled]="isLoading()"></button>
+                                                            <p-button (click)="activateCallback(2)" label="Other Details" severity="secondary" icon="pi pi-arrow-left" iconPos="left" [style]="{ 'margin-top': '8px' }" fluid  />
+                                                       </div>
+                                                  </form>
+                                             </div>
                                         </div>
                                    </ng-template>
 
@@ -220,7 +279,7 @@
 
      </div>
 
-     <div class="card flex justify-center">
+     <!-- <div class="card flex justify-center">
           <p-toast />
           <p-confirmdialog #cd>
                <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
@@ -230,17 +289,15 @@
                               <i class="pi pi-info !text-5xl"></i>
                          </div>
                          <span class="font-bold text-2xl block mb-2 mt-6">{{ message.header }}</span>
-                         <p class="mb-0">{{ message.message }}</p>
+                         <p class="mb-0 text-center">{{ message.message }}</p>
                          <div class="flex items-center gap-2 mt-6">
-                              
-                              <p-button label="Cancel" [outlined]="true" (onClick)="onReject()"
-                                   styleClass="w-32"></p-button>
-                                   <p-button label="OK" (onClick)="onAccept()" styleClass="w-32"></p-button>
+                              <p-button label="OK" (onClick)="onAccept()" styleClass="w-32"></p-button>
                          </div>
                     </div>
                </ng-template>
           </p-confirmdialog>
-     </div>
+     </div> -->
+     
 
 
 </div>

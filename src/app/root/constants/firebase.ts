@@ -6,8 +6,14 @@ export class Collection {
 export class Field {
      static readonly USERNAME = 'username';
      static readonly PASSWORD = 'password';
+     static readonly USERACCOUNTID = 'userAccountId';
 }
 
 export class Operators {
      static readonly ISEQUALTO = '=='
+}
+
+export class ApprovalStatus {
+     static readonly WATINGFORAPPROVAL = 'waiting_for_approval';
+     static readonly APPROVED = 'approved';
 }
