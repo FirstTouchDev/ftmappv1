@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../root/services/firebase.service';
 import { signal } from '@angular/core';
-import { tap, finalize } from 'rxjs';
+import { tap, finalize, debounce, debounceTime } from 'rxjs';
 import { UserAccount } from '../root/models/user-account.model';
 import { User } from '../root/models/user.model';
 import { ApprovalStatus, Collection, Field } from '../root/constants/firebase';
@@ -18,7 +18,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { switchMap, EMPTY, catchError, of } from 'rxjs';
 
 
@@ -38,9 +38,7 @@ import { switchMap, EMPTY, catchError, of } from 'rxjs';
           PasswordModule,
           ButtonModule,
           RouterModule
-          
      ],
-     providers: [MessageService]
 })
 
 export class LoginComponent implements OnInit {
@@ -58,7 +56,8 @@ export class LoginComponent implements OnInit {
           private firebaseService: FirebaseService,
           private localStorageService: LocalStorageService,
           private formBuilder: FormBuilder,
-          private messageService: MessageService
+          private messageService: MessageService,
+          private router: Router
           
      ) {
           this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
@@ -109,13 +108,14 @@ export class LoginComponent implements OnInit {
                }),
                tap((user) => {
                     if (!user) return;
-     
                     this.localStorageService.set(LocalStorageKey.USERDATA, user);
+                    this.router.navigate(['/home']);
                     this.messageService.add({
                          severity: 'success',
                          summary: 'Login Successful!',
                          detail: 'Welcome back.',
                     });
+                   
                }),
                catchError(() => {
                     this.messageService.add({
