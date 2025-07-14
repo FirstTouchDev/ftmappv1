@@ -300,6 +300,9 @@ export class MainWorshipComponent implements OnInit {
 
 
      public onSubmitLineUpDataForm(): void {
+          this.lineUpDataForm.reset();
+          this.enableAllControls();
+          this.viewIndex.set(0);
           this.visible.set(false);
           this._showLineUpSubmittedSuccessfullyDialog();
      }
