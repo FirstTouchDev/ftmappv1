@@ -1,0 +1,120 @@
+<div class="header">
+    <prime-ng-header></prime-ng-header>
+</div>
+
+<div class="body-content">
+    <div class="sticky-menubar">
+        <div class="card w-full">
+            <p-panel styleClass="w-full">
+                <ng-template pTemplate="header">
+                    <div class="flex justify-between items-center w-full h-[12px] mt-6">
+                        <span class="text-lg font-semibold">Worship</span>
+                        <p-button (onClick)="showDialog()" label="Submit Line Up" icon="pi pi-plus" iconPos="left"
+                            severity="primary"></p-button>
+                    </div>
+                </ng-template>
+            </p-panel>
+        </div>
+        <div>
+            <p-dialog header="Submit Line Up" [modal]="true" [(visible)]="visible" [style]="{ width: '360px' }">
+                
+                <form [formGroup]="lineUpDataForm" (ngSubmit)="onSubmitLineUpDataForm()">
+                    <div class="schedule" *ngIf="viewIndex() === 0">
+                        <span class="p-text-secondary block mb-6">Worship Schedule</span>
+                        <div class="items-center gap-4 mb-4">
+                            <p-floatlabel variant="on" class="w-full">
+                                <p-datepicker formControlName="worshipDate" appendTo="body" inputId="worshipDate"
+                                    showIcon iconDisplay="input" fluid />
+                                <label for="worshipDate">Worship Date</label>
+                            </p-floatlabel>
+                            <div *ngIf="worshipDateErrorMessage()" class="mt-2">
+                                <p-message  severity="error" size="small" variant="simple">
+                                    {{ worshipDateErrorMessage() }}
+                                </p-message>
+                            </div>
+                            
+                        </div>
+                        <div class="items-center gap-4 mb-4">
+                            <p-floatlabel class="w-full" variant="on">
+                                <p-select formControlName="serviceType" appendTo="body" inputId="service"
+                                    [options]="services()" optionLabel="name" [editable]="true" class="w-full"
+                                    />
+                                <label for="service">Service</label>
+                            </p-floatlabel>
+                             <div *ngIf="worshipServiceTypeErrorMessage()" class="mt-2">
+                                <p-message  severity="error" size="small" variant="simple">
+                                    {{ worshipServiceTypeErrorMessage() }}
+                                </p-message>
+                            </div>
+                            
+                        </div>
+
+                        <div class="flex justify-end gap-2 mt-8">
+                            <p-button label="Cancel" severity="secondary" (click)="visible.set(false)" />
+                            <p-button label="Next" (click)="moveViewIndex(1)" />
+                        </div>
+                    </div>
+
+                    <div class="singers" *ngIf="viewIndex() === 1">
+                        <span class="p-text-secondary block mb-6">Worship Singers</span>
+                        <div *ngFor="let control of singersControls; let i = index"
+                            class="flex items-center gap-4 mb-4">
+                            <p-floatlabel variant="on" class="w-full">
+                                <p-select [formControl]="control" appendTo="body" [inputId]="'singer-' + i"
+                                    [options]="singerOptions()" optionLabel="firstLastName" [editable]="true"
+                                    class="w-full">
+                                    <ng-template let-value pTemplate="selectedItem">
+                                        <span class="block truncate max-w-full">
+                                            {{ value?.firstLastName | truncate:30 }}
+                                        </span>
+                                    </ng-template>
+                                    <ng-template let-option pTemplate="item">
+                                        <span class="block truncate max-w-full">
+                                            {{ option?.firstLastName | truncate:30 }}
+                                        </span>
+                                    </ng-template>
+                                </p-select>
+
+                                <label [for]="'singer-' + i">Singer {{ i+1 }}</label>
+                            </p-floatlabel>
+                            <p-button severity="danger" *ngIf="i != 0" (click)="removeSinger(i)" icon="pi pi-trash" iconPos="left"></p-button>
+
+                        </div>
+                        <div>
+                            <p-button label="Add Singer" (click)="addSinger()" icon="pi pi-plus" iconPos="left"
+                                fluid [disabled]="singersControls.length >= 6"></p-button>
+                        </div>
+
+
+                        <div class="flex justify-end gap-2 mt-8">
+                            <p-button label="Cancel" severity="secondary" (click)="moveViewIndex(0)" />
+                            <p-button label="Next" (click)="moveViewIndex(2)" />
+                        </div>
+
+                    </div>
+
+
+                    <div class="singers" *ngIf="viewIndex() === 2">
+                        <span class="p-text-secondary block mb-6">Worship Musicians</span>
+
+
+                        <div class="flex justify-end gap-2 mt-8">
+                            <p-button label="Cancel" severity="secondary" (click)="moveViewIndex(0)" />
+                            <p-button label="Next" (click)="moveViewIndex(2)" />
+                        </div>
+
+                    </div>
+
+
+                </form>
+            </p-dialog>
+        </div>
+    </div>
+    
+
+
+
+</div>
+<div class="footer">
+
+</div>

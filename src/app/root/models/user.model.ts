@@ -13,6 +13,9 @@ export class User {
      joinDate?: Date;
      createdAt: Date;
      updatedAt: Date;
+     firstLastName?: string;
+     fullName?: string;
+     roles: string[]
 
      constructor(data: Partial<User> = {}) {
           this.userAccountId = data.userAccountId || '';
@@ -28,6 +31,9 @@ export class User {
           this.joinDate = data.joinDate ? new Date(data.joinDate) : new Date();
           this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
           this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
+          this.firstLastName = data.firstName + " " + data.lastName;
+          this.fullName = data.firstLastName + " " + data.middleName + " " + data.lastName;
+          this.roles = data.roles || [];
      }
 
      static fromJson(json: any): User {
@@ -45,6 +51,9 @@ export class User {
                joinDate: json.joinDate ? new Date(json.joinDate) : undefined,
                createdAt: json.createdAt ? new Date(json.createdAt) : undefined,
                updatedAt: json.updatedAt ? new Date(json.updatedAt) : undefined,
+               firstLastName: json.firstLastName,
+               fullName: json.fullName,
+               roles: json.roles || [],
           });
      }
 
@@ -63,6 +72,9 @@ export class User {
                joinDate: this.joinDate,
                createdAt: this.createdAt,
                updatedAt: this.updatedAt,
+               firstLastName: this.firstLastName,
+               fullName: this.fullName,
+               roles: this.roles,
           };
      }
 }

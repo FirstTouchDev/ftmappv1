@@ -20,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { Router, RouterModule } from '@angular/router';
 import { switchMap, EMPTY, catchError, of } from 'rxjs';
+import { AuthService } from '../root/services/auth.service';
 
 
 @Component({
@@ -57,7 +58,8 @@ export class LoginComponent implements OnInit {
           private localStorageService: LocalStorageService,
           private formBuilder: FormBuilder,
           private messageService: MessageService,
-          private router: Router
+          private router: Router,
+          private authService: AuthService
           
      ) {
           this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
@@ -109,6 +111,7 @@ export class LoginComponent implements OnInit {
                tap((user) => {
                     if (!user) return;
                     this.localStorageService.set(LocalStorageKey.USERDATA, user);
+                    this.authService.login();
                     this.router.navigate(['/home']);
                     this.messageService.add({
                          severity: 'success',

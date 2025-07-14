@@ -6,11 +6,13 @@ export class Collection {
 export class Field {
      static readonly USERNAME = 'username';
      static readonly PASSWORD = 'password';
+     static readonly ROLES = 'roles';
      static readonly USERACCOUNTID = 'userAccountId';
 }
 
 export class Operators {
-     static readonly ISEQUALTO = '=='
+     static readonly ISEQUALTO = '==';
+     static readonly ARRAYCONTAINS = 'array-contains';
 }
 
 export class ApprovalStatus {

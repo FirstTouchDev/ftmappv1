@@ -147,7 +147,7 @@ export class SignUpComponent implements OnInit {
           this.isAccountDataFormSubmitted = true;
           if (this.accountDataForm.valid) {
 
-               const firstName: string = this.personalDataForm.get('username')?.value;
+               const firstName: string = this.personalDataForm.get('firstName')?.value;
                const middleName: string = this.personalDataForm.get('middleName')?.value;
                const lastName: string = this.personalDataForm.get('lastName')?.value;
                const gender: GenderValue = this.personalDataForm.get('gender')?.value;

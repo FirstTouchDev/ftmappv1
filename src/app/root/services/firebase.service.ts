@@ -66,6 +66,20 @@ export class FirebaseService {
           );
      }
 
+     public adminGetAllByArrayFieldContains$<T>(targetCollection: string,arrayField: string,value: string): Observable<T[]> {
+          const colRef = collection(this.firestore, targetCollection);
+          const q = query(colRef, where(arrayField, Operators.ARRAYCONTAINS, value));
+
+          return from(getDocs(q)).pipe(
+               map(snapshot => snapshot.docs.map(docSnap => {
+                    const data = docSnap.data() as T;
+                    return { ...data, id: docSnap.id } as T;
+               })),
+               catchError(err => throwError(() => err))
+          );
+     }
+
+
      public adminGetDataByField$<T>(targetCollection: string, field: string, value: any): Observable<T | null> {
           const collectionRef = collection(this.firestore, targetCollection);
           const queryRef = query(collectionRef, where(field, '==', value), limit(1));
@@ -92,7 +106,6 @@ export class FirebaseService {
                     return true;
                }),
                catchError((err) => {
-                    //this.ionicAlertService.presentAlert('Update Failed', 'Please check your internet connection. If issue persists consult the admin.');
                     return of(false);
                })
           );
