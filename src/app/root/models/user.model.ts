@@ -1,6 +1,7 @@
 export class User {
 
      userAccountId: string;
+     id?: string;
      firstName: string;
      middleName?: string;
      lastName: string;
@@ -32,7 +33,7 @@ export class User {
           this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
           this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
           this.firstLastName = data.firstName + " " + data.lastName;
-          this.fullName = data.firstLastName + " " + data.middleName + " " + data.lastName;
+          this.fullName = data.firstName + " " + data.middleName + " " + data.lastName;
           this.roles = data.roles || [];
      }
 
@@ -76,5 +77,21 @@ export class User {
                fullName: this.fullName,
                roles: this.roles,
           };
+     }
+
+     static createAllOption(): User {
+          return new User({
+               userAccountId: 'all',
+               firstName: 'All',
+               lastName: '',
+               gender: 'N/A',
+               birthDate: new Date(),
+               address: '',
+               emailAddress: '',
+               createdAt: new Date(),
+               updatedAt: new Date(),
+               roles: [],
+               firstLastName: 'All',
+          });
      }
 }

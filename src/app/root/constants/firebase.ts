@@ -10,6 +10,14 @@ export class Field {
      static readonly USERACCOUNTID = 'userAccountId';
 }
 
+export class Roles {
+     static readonly SINGER = 'singer';
+     static readonly KEYBOARDIST = 'keyboardist';
+     static readonly GUITARIST = 'guitarist';
+     static readonly DRUMMER = 'drummer';
+     static readonly BASSIST = 'bassist';
+}
+
 export class Operators {
      static readonly ISEQUALTO = '==';
      static readonly ARRAYCONTAINS = 'array-contains';

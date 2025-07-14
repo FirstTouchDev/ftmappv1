@@ -79,6 +79,20 @@ export class FirebaseService {
           );
      }
 
+     public adminGetAllData$<T>(targetCollection: string): Observable<T[]> {
+          const colRef = collection(this.firestore, targetCollection);
+     
+          return from(getDocs(colRef)).pipe(
+               map(snapshot =>
+                    snapshot.docs.map(docSnap => {
+                         const data = docSnap.data() as T;
+                         return { ...data, id: docSnap.id } as T;
+                    })
+               ),
+               catchError(err => throwError(() => err))
+          );
+     }     
+
 
      public adminGetDataByField$<T>(targetCollection: string, field: string, value: any): Observable<T | null> {
           const collectionRef = collection(this.firestore, targetCollection);

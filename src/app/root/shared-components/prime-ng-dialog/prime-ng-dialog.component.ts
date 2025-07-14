@@ -58,7 +58,7 @@ export class PrimeNgDialogComponent {
           return cssVar ? `var(${cssVar})` : fallback ?? '#000000';
      }
 
-     show(config?: ConfirmDialogConfig) {
+     public show(config?: ConfirmDialogConfig): void {
           if (config) {
                this.header = config.header ?? this.header;
                this.message = config.message ?? this.message;
@@ -74,5 +74,11 @@ export class PrimeNgDialogComponent {
                accept: () => this.buttons[0]?.action?.(),
                reject: () => this.buttons[1]?.action?.()
           });
+     }
+
+     public dismissDialog(): void {
+          if (this.cd) {
+               this.cd.close();
+          }
      }
 }
