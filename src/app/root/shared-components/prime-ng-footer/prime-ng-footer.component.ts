@@ -14,9 +14,9 @@ import { ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-     selector: 'prime-ng-header',
-     templateUrl: './prime-ng-header.component.html',
-     styleUrls: ['./prime-ng-header.component.scss'],
+     selector: 'prime-ng-footer',
+     templateUrl: './prime-ng-footer.component.html',
+     styleUrls: ['./prime-ng-footer.component.scss'],
      standalone: true,
      imports: [
           MenubarModule, 
@@ -33,7 +33,7 @@ import { ButtonModule } from 'primeng/button';
      ]
 
 })
-export class PrimeNgHeaderComponent implements OnInit {
+export class PrimeNgFooterComponent implements OnInit {
 
 
      ngOnInit() {

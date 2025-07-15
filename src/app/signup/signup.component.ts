@@ -32,6 +32,7 @@ import { ViewChild } from '@angular/core';
 import { PrimeNgDialogComponent } from '../root/shared-components/prime-ng-dialog/prime-ng-dialog.component';
 import { User } from '../root/models/user.model';
 import { UserAccount } from '../root/models/user-account.model';
+import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
 
 @Component({
      selector: 'signup',
@@ -85,7 +86,6 @@ export class SignUpComponent implements OnInit {
 
      protected customPasswordErrorMessage = signal<string>('');
      protected customeUsernameErrorMessage = signal<string>('');
-     protected isLoading = signal<boolean>(false);
 
 
 
@@ -93,7 +93,8 @@ export class SignUpComponent implements OnInit {
           private formBuilder: FormBuilder,
           private firebaseService: FirebaseService,
           private messageService: MessageService,
-          private router: Router
+          private router: Router,
+          private primeNgProgressBarService: PrimeNgProgressBarService
      ) {
           this.personalDataForm = this.formBuilder.group({
                firstName: ['', Validators.required],
@@ -176,7 +177,7 @@ export class SignUpComponent implements OnInit {
                // }
 
 
-               this.isLoading.set(true);
+               this.primeNgProgressBarService.show();
                this.firebaseService.adminCheckDoesDataExist$(Collection.USERACCOUNTS, Field.USERNAME, username).pipe(
                     switchMap(exists => {
                          if (exists) {
@@ -220,7 +221,7 @@ export class SignUpComponent implements OnInit {
                          return of(null)
                     }),
                     finalize(() => {
-                         this.isLoading.set(false);
+                         this.primeNgProgressBarService.hide();
                     })
                ).subscribe();
 

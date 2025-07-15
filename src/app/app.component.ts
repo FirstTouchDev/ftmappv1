@@ -7,11 +7,12 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
+import { PrimeNgProgressBar } from "./root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.component";
 
 
 @Component({
      selector: 'app-root',
-     imports: [RouterOutlet, ToastModule, MessageModule],
+     imports: [RouterOutlet, ToastModule, MessageModule, PrimeNgProgressBar],
      templateUrl: './app.component.html',
      styleUrl: './app.component.css',
      standalone: true,

@@ -1,16 +1,3 @@
-.header{
-    z-index: 1500;
-}
-.sticky-menubar {
-    position: sticky;
-    top: 0;
-    //z-index: 1000;
-}
-
-.body-content {
-    padding: 24px;
-}
-
 :host ::ng-deep .p-panel {
     border: none !important;
     box-shadow: none !important;

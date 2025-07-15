@@ -1,24 +1,14 @@
-<div class="card sticky-menubar">
-     <p-menubar [model]="items">
-          <ng-template #start>
-          </ng-template>
-          <ng-template #item let-item let-root="root">
-               <a pRipple [routerLink]="item.routerLink" class="flex items-center p-menubar-item-link">
-                    <i class="{{ item.icon }}"></i>
-                    <span>{{ item.label }}</span>
-                    <p-badge *ngIf="item.badge" [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
-                    <span *ngIf="item.shortcut"
-                         class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{
-                         item.shortcut }}</span>
-                    <i *ngIf="item.items" [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
-               </a>
-          </ng-template>
-          <ng-template #end>
-               <div class="flex items-center gap-2">
-                    <!-- <input type="text" pInputText placeholder="Search" class="w-36" /> -->
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-                         shape="circle" />
-               </div>
-          </ng-template>
-     </p-menubar>
-</div>
+<div class="card fixed top-0 left-0 right-0 z-50 bg-white">
+     <div class="flex justify-between items-center py-2 h-16 px-4 bg-white">
+       <!-- Left-aligned text -->
+       <div style="display: flex; justify-content: center; align-items: center;">
+          <img src="../ftmlogos/ftm_with_text_logo.png" style="height: auto; width: 140px;" />
+     </div>
+       
+       <!-- Right-aligned icon -->
+       <div>
+         <i class="pi pi-megaphone text-xl text-gray-600"></i>
+       </div>
+     </div>
+   </div>
+   

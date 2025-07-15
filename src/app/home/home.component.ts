@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimeNgHeaderComponent } from '../root/shared-components/prime-ng-header/prime-ng-header.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { PrimeNgFooterComponent } from '../root/shared-components/prime-ng-footer/prime-ng-footer.component';
+import { PrimeNgHeaderComponent } from '../root/shared-components/prime-ng-header/prime-ng-header.component';
 
 @Component({
      selector: 'home',
@@ -11,7 +12,8 @@ import { ButtonModule } from 'primeng/button';
      imports: [
           PrimeNgHeaderComponent,
           CardModule,
-          ButtonModule
+          ButtonModule,
+          PrimeNgFooterComponent
      ]
 })
 export class HomeComponent implements OnInit {

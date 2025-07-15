@@ -21,6 +21,8 @@ import { MessageModule } from 'primeng/message';
 import { Router, RouterModule } from '@angular/router';
 import { switchMap, EMPTY, catchError, of } from 'rxjs';
 import { AuthService } from '../root/services/auth.service';
+import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
+import { CurrentLoggedInUserService } from '../root/services/current-logged-in-user.service';
 
 
 @Component({
@@ -51,7 +53,6 @@ export class LoginComponent implements OnInit {
 
      protected username: string = '';
      protected password: string = '';
-     protected isLoggingIn = signal<boolean>(false);
 
      constructor(
           private firebaseService: FirebaseService,
@@ -59,7 +60,9 @@ export class LoginComponent implements OnInit {
           private formBuilder: FormBuilder,
           private messageService: MessageService,
           private router: Router,
-          private authService: AuthService
+          private authService: AuthService,
+          private primeNgProgressBarService: PrimeNgProgressBarService,
+          private currentLoggedInUserService: CurrentLoggedInUserService   ,
           
      ) {
           this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
@@ -69,8 +72,7 @@ export class LoginComponent implements OnInit {
 
      
      public onLogin(): void {
-          this.isLoggingIn.set(true);
-     
+          this.primeNgProgressBarService.show();
           this.firebaseService.adminVerifyUserCredentials$(this.username, this.password).pipe(
                switchMap((userAccountDocumentId) => {
                     if (!userAccountDocumentId) {
@@ -110,6 +112,7 @@ export class LoginComponent implements OnInit {
                }),
                tap((user) => {
                     if (!user) return;
+                    this.currentLoggedInUserService.setUserId(user.id!);
                     this.localStorageService.set(LocalStorageKey.USERDATA, user);
                     this.authService.login();
                     this.router.navigate(['/home']);
@@ -129,7 +132,7 @@ export class LoginComponent implements OnInit {
                     return of(null);
                }),
                finalize(() => {
-                    this.isLoggingIn.set(false);
+                    this.primeNgProgressBarService.hide();
                })
           ).subscribe();
      }

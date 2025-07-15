@@ -1,5 +1,6 @@
 export class Collection {
      static readonly USERS = 'users';
+     static readonly LINEUPS = 'lineUps';
      static readonly USERACCOUNTS = 'userAccounts';
 }
 
@@ -27,3 +28,4 @@ export class ApprovalStatus {
      static readonly WATINGFORAPPROVAL = 'waiting_for_approval';
      static readonly APPROVED = 'approved';
 }
+
