@@ -5,42 +5,41 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { GenderOption, GENDERS } from '../../root/constants/gender';
+import { GenderOption, GENDERS } from '../../../../root/constants/gender';
 import { DropdownModule } from 'primeng/dropdown';
-import { ServiceTypeOption, SERVICETYPES } from '../../root/constants/service';
+import { ServiceTypeOption, SERVICETYPES } from '../../../../root/constants/service';
 import { CommonModule } from '@angular/common';
 import { FormArray } from '@angular/forms';
-import { FirebaseService } from '../../root/services/firebase.service';
-import { ApprovalStatus, Collection, Field, Roles } from '../../root/constants/firebase';
+import { FirebaseService } from '../../../../root/services/firebase.service';
+import { ApprovalStatus, Collection, Field, Roles } from '../../../../root/constants/firebase';
 import { catchError, finalize, take, tap } from 'rxjs';
-import { User } from '../../root/models/user.model';
+import { User } from '../../../../root/models/user.model';
 import { SelectModule } from 'primeng/select';
-import { TruncatePipe } from '../../root/pipes/truncate.pipe';
+import { TruncatePipe } from '../../../../root/pipes/truncate.pipe';
 import { MessageModule } from 'primeng/message';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
 import { IconFieldModule } from 'primeng/iconfield';
 import { DatePickerModule } from 'primeng/datepicker';
-import { PrimeNgDialogComponent } from '../../root/shared-components/prime-ng-dialog/prime-ng-dialog.component';
+import { PrimeNgDialogComponent } from '../../../../root/shared-components/prime-ng-dialog/prime-ng-dialog.component';
 import { ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { PrimeNgProgressBar } from '../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.component';
-import { PrimeNgProgressBarService } from '../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
-import { LineUp } from '../../root/models/line-up.model';
-import { CurrentLoggedInUserService } from '../../root/services/current-logged-in-user.service';
-import { PrimeNgHeaderComponent } from '../../root/shared-components/prime-ng-header/prime-ng-header.component';
-import { PrimeNgFooterComponent } from '../../root/shared-components/prime-ng-footer/prime-ng-footer.component';
+import { PrimeNgProgressBar } from '../../../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.component';
+import { PrimeNgProgressBarService } from '../../../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
+import { LineUp } from '../../../../root/models/line-up.model';
+import { CurrentLoggedInUserService } from '../../../../root/services/current-logged-in-user.service';
+import { PrimeNgHeaderComponent } from '../../../../root/shared-components/prime-ng-header/prime-ng-header.component';
+import { PrimeNgFooterComponent } from '../../../../root/shared-components/prime-ng-footer/prime-ng-footer.component';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
-     selector: 'main-worship',
-     templateUrl: './main-worship.component.html',
-     styleUrls: ['./main-worship.component.scss'],
+     selector: 'submit-line-up',
+     templateUrl: './submit-line-up.component.html',
+     styleUrls: ['./submit-line-up.component.scss'],
      standalone: true,
      imports: [
           InputIconModule,
           IconFieldModule,
-          PrimeNgHeaderComponent,
-          PrimeNgFooterComponent,
           PanelModule,
           DialogModule,
           ButtonModule,
@@ -58,20 +57,21 @@ import { PrimeNgFooterComponent } from '../../root/shared-components/prime-ng-fo
      ],
      providers: [ConfirmationService]
 })
-export class MainWorshipComponent implements OnInit {
+export class SubmitLineUpComponent implements OnInit {
 
      @ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
+     @Input() visible: boolean = false;
+     @Output() visibleChange = new EventEmitter<boolean>();
+
+
 
      private currentLoggedInUserId: string = '';
 
      protected lineUpDataForm: FormGroup;
-     protected visible = signal<boolean>(false);
-
      protected services = signal<ServiceTypeOption[]>([...SERVICETYPES]);
-
      protected viewIndex = signal<number>(0);
 
-     private masterUsers: User[] = [];
+
      private _singerOptions: User[] = [];
      protected drummerOptions = signal<User[]>([]);
      protected bassistOptions = signal<User[]>([]);
@@ -150,7 +150,6 @@ export class MainWorshipComponent implements OnInit {
           else {
                this.enableAllControls();
           }
-
 
           if (index === 2) {
                const selectedSingers = (this.lineUpDataForm.get('singers')?.value || []).filter((s: User | null) => s !== null);
@@ -314,7 +313,7 @@ export class MainWorshipComponent implements OnInit {
                     this.lineUpDataForm.reset();
                     this.enableAllControls();
                     this.viewIndex.set(0);
-                    this.visible.set(false);
+                    this.visible = false;
                },
                error: (err) => {
                     console.log('map line up error', err);
@@ -368,7 +367,7 @@ export class MainWorshipComponent implements OnInit {
           this.primeNgDialog.show({
                header: 'Success',
                message: 'The line up was successfully created! The line up will go through approval process. Please check for notifications.',
-               icon: 'pi pi-info-circle',
+               icon: 'fa-solid fa-circle-check',
                iconColorToken: 'primary-contrast',
                iconBgColorToken: 'primary',
                buttons: [
@@ -381,8 +380,9 @@ export class MainWorshipComponent implements OnInit {
           });
      }
 
-     protected showDialog(): void {
-          this.visible.set(true);
+     public closeDialog(): void {
+          this.visible = false;
+          this.visibleChange.emit(false);
      }
 
 }

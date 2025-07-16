@@ -12,6 +12,7 @@ import { PopoverModule } from 'primeng/popover';
 import { Popover } from 'primeng/popover';
 import { ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 
 @Component({
      selector: 'prime-ng-header',
@@ -26,7 +27,8 @@ import { ButtonModule } from 'primeng/button';
           CommonModule, 
           RouterModule, 
           PopoverModule,
-          ButtonModule
+          ButtonModule,
+          CardModule
      ],
      providers: [
           PrimeIcons

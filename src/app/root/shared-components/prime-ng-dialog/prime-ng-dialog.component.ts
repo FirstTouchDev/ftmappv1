@@ -34,7 +34,7 @@ export class PrimeNgDialogComponent {
 
      @Input() header = 'Confirm';
      @Input() message = 'Are you sure?';
-     @Input() icon = 'pi pi-info-circle';
+     @Input() icon = 'fa-solid fa-circle-info';
      @Input() iconColor = '#ffffff';
      @Input() iconBgColor = '#007ad9';
      @Input() buttons: ConfirmButton[] = [];

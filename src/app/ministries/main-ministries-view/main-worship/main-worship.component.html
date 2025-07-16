@@ -1,0 +1,51 @@
+<prime-ng-dialog #primeNgDialog></prime-ng-dialog>
+
+<div>
+     <prime-ng-header></prime-ng-header>
+</div>
+
+
+<div class="pt-16 pb-16 p-6">
+     <div class="sticky top-12 z-40">
+          <div class="card w-full">
+               <p-panel styleClass="w-full">
+                    <ng-template pTemplate="header">
+                         <div class="flex justify-between items-center w-full">
+                              <span class="text-lg font-semibold">Worship</span>
+                              <p-button (onClick)="openSubmitLineUpDialog()" label="Submit Line Up" icon="fa-solid fa-plus" iconPos="left"
+                                   severity="primary">
+                              </p-button>
+                         </div>
+                    </ng-template>
+               </p-panel>
+          </div>
+     </div>
+     <submit-line-up [(visible)]="isSubmitLineUpDialogVisible"></submit-line-up>
+     <div class="submitted-lineup">
+          <span class="text-lg font-semibold">For Approval</span>
+
+          <div class="horizontal-scroll-container overflow-x-auto whitespace-nowrap space-x-4 p-4">
+               <p-card  *ngFor="let lineUp of lineUps" class="inline-block w-40 flex items-center justify-center text-xl font-bold">
+
+            
+                    <ng-template #title>
+                      <div class="text-center text-lg font-semibold">
+                        {{ lineUp.drummer }}
+                      </div>
+                    </ng-template>
+            
+                    <ng-template #subtitle>
+                      <div class="text-center text-sm text-gray-600">
+                       {{ lineUp.worshipDate }}
+                      </div>
+                    </ng-template>
+               </p-card>
+          </div>
+
+        
+     
+</div>
+
+<div>
+     <prime-ng-footer></prime-ng-footer>
+</div>

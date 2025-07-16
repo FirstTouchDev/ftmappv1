@@ -4,7 +4,8 @@ import { SignUpComponent } from './signup/signup.component';
 import { HomeComponent } from './home/home.component';
 import { MainGuard } from './root/guards/main.guard';
 import { LoginRedirectGuard } from './root/guards/login-redirect.guard';
-import { MainWorshipComponent } from './ministries/main-worship/main-worship.component';
+import { MainWorshipComponent } from './ministries/main-ministries-view/main-worship/main-worship.component';
+import { MainMinistriesComponent } from './ministries/main-ministries-view/main-ministries.component';
 
 
 export const routes: Routes = [
@@ -12,5 +13,6 @@ export const routes: Routes = [
      { path: 'login', component: LoginComponent },
      { path: 'signup', component: SignUpComponent },
      { path: 'home', component: HomeComponent },
-     { path: 'worship', component: MainWorshipComponent },
+     { path: 'ministries', component: MainMinistriesComponent },
+     { path: 'ministries/worship', component: MainWorshipComponent }
 ];

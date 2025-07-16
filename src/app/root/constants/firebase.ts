@@ -9,6 +9,7 @@ export class Field {
      static readonly PASSWORD = 'password';
      static readonly ROLES = 'roles';
      static readonly USERACCOUNTID = 'userAccountId';
+     static readonly CREATEDBY = 'createdBy';
 }
 
 export class Roles {

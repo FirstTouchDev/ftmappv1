@@ -94,6 +94,21 @@ export class FirebaseService {
      }     
 
 
+     // returns all the data that matches the field and value
+     public adminGetDataByFieldValue$<T>(targetCollection: string, field: string, value: any): Observable<T[]> {
+          const colRef = collection(this.firestore, targetCollection);
+          const q = query(colRef, where(field, '==', value));
+        
+          return from(getDocs(q)).pipe(  
+               map(snapshot =>
+               snapshot.docs.map(docSnap => {
+                    const data = docSnap.data() as T;
+                    return { ...data, id: docSnap.id } as T;
+               })),
+               catchError(err => throwError(() => err))
+          );
+     }
+
      public adminGetDataByField$<T>(targetCollection: string, field: string, value: any): Observable<T | null> {
           const collectionRef = collection(this.firestore, targetCollection);
           const queryRef = query(collectionRef, where(field, '==', value), limit(1));
