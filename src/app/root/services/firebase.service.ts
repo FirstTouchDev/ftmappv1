@@ -46,27 +46,27 @@ export class FirebaseService {
           );
      }
 
-     public adminGetData$<T>(targetCollection: string, id: string): Observable<T | null> {
+     public adminGetData$<T>(
+          targetCollection: string,
+          id: string,
+          fromJson: (json: any) => T
+     ): Observable<T | null> {
           const docRef = doc(this.firestore, targetCollection, id);
           return from(getDoc(docRef)).pipe(
                map((docSnap) => {
-
                     if (docSnap.exists()) {
-                         const data = docSnap.data() as T;
-                         return { ...data, id } as T;
-                    }
-
-                    else {
+                         const data = docSnap.data();
+                         return fromJson({ ...data, id });
+                    } else {
                          return null;
                     }
                }),
-               catchError((err) => {
-                    return throwError(() => err);
-               })
+               catchError(err => throwError(() => err))
           );
      }
 
-     public adminGetAllByArrayFieldContains$<T>(targetCollection: string,arrayField: string,value: string): Observable<T[]> {
+
+     public adminGetAllByArrayFieldContains$<T>(targetCollection: string, arrayField: string, value: string): Observable<T[]> {
           const colRef = collection(this.firestore, targetCollection);
           const q = query(colRef, where(arrayField, Operators.ARRAYCONTAINS, value));
 
@@ -81,7 +81,7 @@ export class FirebaseService {
 
      public adminGetAllData$<T>(targetCollection: string): Observable<T[]> {
           const colRef = collection(this.firestore, targetCollection);
-     
+
           return from(getDocs(colRef)).pipe(
                map(snapshot =>
                     snapshot.docs.map(docSnap => {
@@ -91,20 +91,20 @@ export class FirebaseService {
                ),
                catchError(err => throwError(() => err))
           );
-     }     
+     }
 
 
      // returns all the data that matches the field and value
      public adminGetDataByFieldValue$<T>(targetCollection: string, field: string, value: any): Observable<T[]> {
           const colRef = collection(this.firestore, targetCollection);
           const q = query(colRef, where(field, '==', value));
-        
-          return from(getDocs(q)).pipe(  
+
+          return from(getDocs(q)).pipe(
                map(snapshot =>
-               snapshot.docs.map(docSnap => {
-                    const data = docSnap.data() as T;
-                    return { ...data, id: docSnap.id } as T;
-               })),
+                    snapshot.docs.map(docSnap => {
+                         const data = docSnap.data() as T;
+                         return { ...data, id: docSnap.id } as T;
+                    })),
                catchError(err => throwError(() => err))
           );
      }
@@ -151,6 +151,13 @@ export class FirebaseService {
                     }
                }),
                catchError((err) => throwError(() => err))
+          );
+     }
+
+     public adminCheckDocExists$(targetCollection: string, docId: string): Observable<boolean> {
+          const docRef = doc(this.firestore, targetCollection, docId);
+          return from(getDoc(docRef)).pipe(
+               map(docSnap => docSnap.exists())
           );
      }
 

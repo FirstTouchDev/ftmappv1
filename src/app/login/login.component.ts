@@ -22,7 +22,6 @@ import { Router, RouterModule } from '@angular/router';
 import { switchMap, EMPTY, catchError, of } from 'rxjs';
 import { AuthService } from '../root/services/auth.service';
 import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
-import { CurrentLoggedInUserService } from '../root/services/current-logged-in-user.service';
 
 
 @Component({
@@ -62,7 +61,6 @@ export class LoginComponent implements OnInit {
           private router: Router,
           private authService: AuthService,
           private primeNgProgressBarService: PrimeNgProgressBarService,
-          private currentLoggedInUserService: CurrentLoggedInUserService   ,
           
      ) {
           this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
@@ -85,7 +83,7 @@ export class LoginComponent implements OnInit {
                     }
      
                     this._verifiedUserAccountDocumentId = userAccountDocumentId;
-                    return this.firebaseService.adminGetData$<UserAccount>(Collection.USERACCOUNTS, userAccountDocumentId);
+                    return this.firebaseService.adminGetData$<UserAccount>(Collection.USERACCOUNTS, userAccountDocumentId, UserAccount.fromJson);
                }),
                switchMap((userAccount) => {
                     if (!userAccount) return EMPTY;
@@ -112,7 +110,6 @@ export class LoginComponent implements OnInit {
                }),
                tap((user) => {
                     if (!user) return;
-                    this.currentLoggedInUserService.setUserId(user.id!);
                     this.localStorageService.set(LocalStorageKey.USERDATA, user);
                     this.authService.login();
                     this.router.navigate(['/home']);
@@ -136,52 +133,5 @@ export class LoginComponent implements OnInit {
                })
           ).subscribe();
      }
-     
-
-     protected verifyUser(): void {
-          this.isLoading.set(true);
-          this.firebaseService.adminVerifyUserCredentials$('superuser', 'lisud').pipe(
-               tap((userAccountDocumentId) => {
-                    if (userAccountDocumentId){
-                         this._verifiedUserAccountDocumentId = userAccountDocumentId;
-                         this.localStorageService.set(LocalStorageKey.DOCUMENTMASTERUSERID, this._verifiedUserAccountDocumentId);
-                    } 
-                    else {
-                         //this.ionicAlertService.presentAlert('Oops', 'User not found.');
-                    }
-               }),
-               finalize(() => {
-                    this.isLoading.set(false);
-               })
-          ).subscribe();
-     }
-
-     protected updateUser(): void {
-          this.isLoading.set(true);
-          const partialUpdate = {
-               password: 'lisud',
-             };
-          this.firebaseService.adminUpdateData$(Collection.USERACCOUNTS, this._verifiedUserAccountDocumentId + '123' || '', partialUpdate).pipe(
-               tap((response) => {
-                    console.log(response);
-               }),
-               finalize(() => {
-                    this.isLoading.set(false);
-               })
-          ).subscribe();
-     }
-
-     protected deleteData(): void {
-          this.isLoading.set(true);
-          this.firebaseService.adminDeleteData$(Collection.USERACCOUNTS, 'kW9eaWhMNUVw2mkq6j5l').pipe(
-               tap((res) => {
-                    console.log('res', res);
-               }),
-               finalize(() => {
-                    this.isLoading.set(false);
-               })
-          ).subscribe();
-     }
-
 
 }

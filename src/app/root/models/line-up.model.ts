@@ -1,5 +1,5 @@
 import { ApprovalStatus } from "../constants/firebase";
-
+import { Timestamp } from "firebase/firestore";
 export class LineUp {
 
      createdBy: string;
@@ -17,8 +17,8 @@ export class LineUp {
      songArtist?: string[];
      songLink?: string[];
      songAssignedSinger?: string[];
-     practiceDateTime?: Date;
-     practiceNotes?: string;
+     rehearsalDateTime?: Date;
+     rehearsalNotes?: string;
      status: string;
      createdAt?: Date;
      updatedAt?: Date;
@@ -39,8 +39,8 @@ export class LineUp {
           this.songArtist = data.songArtist || [];
           this.songLink = data.songLink || [];
           this.songAssignedSinger = data.songAssignedSinger || [];
-          this.practiceDateTime = data.practiceDateTime ? new Date(data.practiceDateTime) : new Date();
-          this.practiceNotes = data.practiceNotes || '';
+          this.rehearsalDateTime = data.rehearsalDateTime ? new Date(data.rehearsalDateTime) : new Date();
+          this.rehearsalNotes = data.rehearsalNotes || '';
           this.status = data.status || ApprovalStatus.WATINGFORAPPROVAL;
           this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
           this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
@@ -49,7 +49,7 @@ export class LineUp {
      static fromJson(json: any): LineUp {
           return new LineUp({
                createdBy: json.createdBy,
-               worshipDate: json.worshipDate ? new Date(json.worshipDate) : undefined,
+               worshipDate: json.worshipDate instanceof Timestamp ? json.worshipDate.toDate() : new Date(json.worshipDate),
                serviceType: json.serviceType,
                singers: json.singers,
                drummer: json.drummer,
@@ -63,11 +63,11 @@ export class LineUp {
                songArtist: json.songArtist,
                songLink: json.songLink,
                songAssignedSinger: json.songAssignedSinger,
-               practiceDateTime: json.practiceDateTime ? new Date(json.practiceDateTime) : undefined,
-               practiceNotes: json.practiceNotes,
+               rehearsalDateTime: json.rehearsalDateTime instanceof Timestamp ? json.rehearsalDateTime.toDate() : new Date(json.rehearsalDateTime),
+               rehearsalNotes: json.rehearsalNotes,
                status: json.status,
-               createdAt: json.createdAt ? new Date(json.createdAt) : undefined,
-               updatedAt: json.updatedAt ? new Date(json.updatedAt) : undefined,
+               createdAt: json.createdAt instanceof Timestamp ? json.createdAt.toDate() : new Date(json.createdAt),
+               updatedAt: json.updatedAt instanceof Timestamp ? json.updatedAt.toDate() : new Date(json.updatedAt),
           });
      }
 
@@ -88,8 +88,8 @@ export class LineUp {
                songArtist: this.songArtist,
                songLink: this.songLink,
                songAssignedSinger: this.songAssignedSinger,
-               practiceDateTime: this.practiceDateTime,
-               practiceNotes: this.practiceNotes,
+               rehearsalDateTime: this.rehearsalDateTime,
+               rehearsalNotes: this.rehearsalNotes,
                status: this.status,
                createdAt: this.createdAt,
                updatedAt: this.updatedAt,

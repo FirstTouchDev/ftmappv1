@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export class User {
 
      userAccountId: string;
@@ -44,14 +46,14 @@ export class User {
                middleName: json.middleName,
                lastName: json.lastName,
                gender: json.gender,
-               birthDate: json.birthDate ? new Date(json.birthDate) : undefined,
+               birthDate: json.birthDate instanceof Timestamp ? json.birthDate.toDate() : new Date(json.birthDate),
                address: json.address,
                phoneNumber: json.phoneNumber,
                invitedBy: json.invitedBy,
                emailAddress: json.emailAddress,
-               joinDate: json.joinDate ? new Date(json.joinDate) : undefined,
-               createdAt: json.createdAt ? new Date(json.createdAt) : undefined,
-               updatedAt: json.updatedAt ? new Date(json.updatedAt) : undefined,
+               joinDate: json.joinDate instanceof Timestamp ? json.joinDate.toDate() : new Date(json.joinDate),
+               createdAt: json.createdAt instanceof Timestamp ? json.createdAt.toDate() : new Date(json.createdAt),
+               updatedAt: json.updatedAt instanceof Timestamp ? json.updatedAt.toDate() : new Date(json.updatedAt),
                firstLastName: json.firstLastName,
                fullName: json.fullName,
                roles: json.roles || [],

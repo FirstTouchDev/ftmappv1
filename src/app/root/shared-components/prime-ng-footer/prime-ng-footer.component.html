@@ -1,7 +1,7 @@
 <div class="card fixed bottom-0 left-0 right-0 z-50">
      <p-card>
           <div class="flex justify-between items-center h-2 py-2 gap-x-10 sm:gap-x-0 px-4 sm:px-0">
-               <div *ngFor="let item of navItems" (click)="router.navigateByUrl(item.route)" [ngClass]="[
+               <div *ngFor="let item of navItems" (click)="reRoute(item.route)" [ngClass]="[
              'flex flex-col items-center text-center flex-1 cursor-pointer transition-colors',
              isActive(item.route)
                ? 'text-[var(--p-primary-color)]'
@@ -12,4 +12,8 @@
                </div>
           </div>
      </p-card>
+     <p-sidebar [(visible)]="sidebarVisible2" position="right">
+          <h3>Right Sidebar</h3>
+      </p-sidebar>
+      
 </div>

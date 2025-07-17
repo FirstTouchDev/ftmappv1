@@ -7,10 +7,13 @@ import { CommonModule } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
 import { MenubarModule } from 'primeng/menubar';
 import { Router, RouterModule } from '@angular/router';
+import { SidebarModule } from 'primeng/sidebar';
 import { PopoverModule } from 'primeng/popover';
 import { ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { StyleClassModule } from 'primeng/styleclass';
+import { Sidebar } from 'primeng/sidebar';
 
 @Component({
      selector: 'prime-ng-footer',
@@ -26,14 +29,24 @@ import { CardModule } from 'primeng/card';
           RouterModule,
           PopoverModule,
           ButtonModule,
-          CardModule
+          CardModule,
+          SidebarModule,
+          StyleClassModule
      ],
      providers: [PrimeIcons]
 })
 export class PrimeNgFooterComponent implements OnInit {
+
      navItems: { label: string; icon: string; route: string }[] = [];
+     sidebarVisible2: boolean = false;
 
      constructor(protected router: Router) { }
+
+     @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+
+    closeCallback(e: any): void {
+        this.sidebarRef.close(e);
+    }
 
      ngOnInit(): void {
           this.navItems = [
@@ -46,5 +59,14 @@ export class PrimeNgFooterComponent implements OnInit {
 
      public isActive(route: string): boolean {
           return this.router.url.startsWith(route)
+     }
+
+     public reRoute(route: string): void {
+          if (route === '/profile'){
+               console.log("ass")
+               this.sidebarVisible2 = true;
+               return;
+          }
+          this.router.navigateByUrl(route);
      }
 }

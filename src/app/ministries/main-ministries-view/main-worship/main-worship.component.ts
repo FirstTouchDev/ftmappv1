@@ -3,7 +3,6 @@ import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNgDialogComponent } from '../../../root/shared-components/prime-ng-dialog/prime-ng-dialog.component';;
 import { ConfirmationService } from 'primeng/api';
-import { CurrentLoggedInUserService } from '../../../root/services/current-logged-in-user.service';
 import { PrimeNgHeaderComponent } from '../../../root/shared-components/prime-ng-header/prime-ng-header.component';
 import { PrimeNgFooterComponent } from '../../../root/shared-components/prime-ng-footer/prime-ng-footer.component';
 import { SubmitLineUpComponent } from './submit-line-up/submit-line-up.component';
@@ -13,6 +12,7 @@ import { take, tap } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { LineUp } from '../../../root/models/line-up.model';
+import { DataHydrationService } from '../../../root/services/data-hydration.service';
 
 @Component({
      selector: 'main-worship',
@@ -41,7 +41,7 @@ export class MainWorshipComponent implements OnInit {
 
      constructor(
           private firebaseService: FirebaseService,
-          private currentLoggedInUserService: CurrentLoggedInUserService
+          private dataHydrationService: DataHydrationService
           
      ) {
 
@@ -54,7 +54,18 @@ export class MainWorshipComponent implements OnInit {
           //                console.log("line up", this.lineUps);
           //           })
           //      ).subscribe();
-          // });             
+          // });     
+          
+          // this.dataHydrationService.hydrateReferences$(
+          //      this.firebaseService.adminGetAllData$<LineUp>(Collection.LINEUPS),
+          //      {
+          //           createdBy: { collection: Collection.USERS },
+          //           singers: { collection: Collection.USERS, isArray: true },
+          //      }
+          // ).subscribe(hydratedLineUps => {
+          //      this.lineUps = hydratedLineUps;
+          //      console.log('Fully hydrated lineUps:', this.lineUps);
+          // });
 
      }
 

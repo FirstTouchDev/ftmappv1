@@ -10,6 +10,7 @@ export class Field {
      static readonly ROLES = 'roles';
      static readonly USERACCOUNTID = 'userAccountId';
      static readonly CREATEDBY = 'createdBy';
+     static readonly ID = 'id';
 }
 
 export class Roles {
@@ -26,7 +27,7 @@ export class Operators {
 }
 
 export class ApprovalStatus {
-     static readonly WATINGFORAPPROVAL = 'waiting_for_approval';
-     static readonly APPROVED = 'approved';
+     static readonly WATINGFORAPPROVAL = 'Waiting for approval';
+     static readonly APPROVED = 'Approved';
 }
 

@@ -27,7 +27,6 @@ import { ConfirmationService } from 'primeng/api';
 import { PrimeNgProgressBar } from '../../../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.component';
 import { PrimeNgProgressBarService } from '../../../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
 import { LineUp } from '../../../../root/models/line-up.model';
-import { CurrentLoggedInUserService } from '../../../../root/services/current-logged-in-user.service';
 import { PrimeNgHeaderComponent } from '../../../../root/shared-components/prime-ng-header/prime-ng-header.component';
 import { PrimeNgFooterComponent } from '../../../../root/shared-components/prime-ng-footer/prime-ng-footer.component';
 import { Output, EventEmitter } from '@angular/core';
@@ -85,7 +84,6 @@ export class SubmitLineUpComponent implements OnInit {
           private formBuilder: FormBuilder,
           private firebaseService: FirebaseService,
           private primeNgProgressBarService: PrimeNgProgressBarService,
-          private currentLoggedInUserService: CurrentLoggedInUserService
           
      ) {
 
@@ -104,8 +102,8 @@ export class SubmitLineUpComponent implements OnInit {
                songArtist: this.formBuilder.array([]),
                songLink: this.formBuilder.array([]),
                songAssignedSinger: this.formBuilder.array([]),
-               practiceDateTime: [null],
-               practiceNotes: [''],
+               rehearsalDateTime: [null],
+               rehearsalNotes: [''],
           });
 
           this.firebaseService.adminGetAllData$<User>(Collection.USERS).pipe(
@@ -128,11 +126,11 @@ export class SubmitLineUpComponent implements OnInit {
 
 
      ngOnInit() {
-          this.currentLoggedInUserService.userId$.pipe(
-               take(1)
-          ).subscribe(userId => {
-               this.currentLoggedInUserId = userId || '';
-          });
+          // this.currentLoggedInUserService.userId$.pipe(
+          //      take(1)
+          // ).subscribe(userId => {
+          //      this.currentLoggedInUserId = userId || '';
+          // });
 
           console.log('currentLoggedInUserId on init', this.currentLoggedInUserId);
           this.setNumberOfSingersDefault();
@@ -336,8 +334,8 @@ export class SubmitLineUpComponent implements OnInit {
           const songArtist: string[] = this.lineUpDataForm.get('songArtist')?.value || [];
           const songLink: string[] = this.lineUpDataForm.get('songLink')?.value || [];
           const songAssignedSinger: string[] = this.lineUpDataForm.get('songAssignedSinger')?.value || [];
-          const practiceDateTime: Date  = this.lineUpDataForm.get('practiceDateTime')?.value;
-          const practiceNotes: string = this.lineUpDataForm.get('practiceNotes')?.value || '';
+          const rehearsalDateTime: Date  = this.lineUpDataForm.get('rehearsalDateTime')?.value;
+          const rehearsalNotes: string = this.lineUpDataForm.get('rehearsalNotes')?.value || '';
 
           const lineUp = new LineUp({
                createdBy: this.currentLoggedInUserId,
@@ -355,8 +353,8 @@ export class SubmitLineUpComponent implements OnInit {
                songArtist: songArtist,
                songLink: songLink,
                songAssignedSinger: songAssignedSinger,
-               practiceDateTime: practiceDateTime,
-               practiceNotes: practiceNotes,
+               rehearsalDateTime: rehearsalDateTime,
+               rehearsalNotes: rehearsalNotes,
                status: ApprovalStatus.WATINGFORAPPROVAL,
           });
 

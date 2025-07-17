@@ -238,7 +238,7 @@ export class SignUpComponent implements OnInit {
           this.primeNgDialog.show({
                header: 'Success',
                message: 'The account was successfully created! An email will be sent to you once the account is ready.',
-               icon: 'fa-solid',
+               icon: 'fa-solid fa-check',
                iconColorToken: 'primary-contrast',
           iconBgColorToken: 'primary',
                buttons: [
