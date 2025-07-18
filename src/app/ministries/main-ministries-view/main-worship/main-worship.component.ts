@@ -8,11 +8,18 @@ import { PrimeNgFooterComponent } from '../../../root/shared-components/prime-ng
 import { SubmitLineUpComponent } from './submit-line-up/submit-line-up.component';
 import { FirebaseService } from '../../../root/services/firebase.service';
 import { Collection, Field } from '../../../root/constants/firebase';
-import { take, tap } from 'rxjs';
+import { finalize, take, tap } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { LineUp } from '../../../root/models/line-up.model';
 import { DataHydrationService } from '../../../root/services/data-hydration.service';
+import { DateTimePipe } from '../../../root/pipes/datetime.pipe';
+import { SkeletonModule } from 'primeng/skeleton';
+import { PrimeNgLoadingSpinnerService } from '../../../root/shared-components/prime-ng-loading-spinner/prime-ng-loading-spinner.service';
+import { DividerModule } from 'primeng/divider';
+import { computed } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 @Component({
      selector: 'main-worship',
@@ -21,50 +28,80 @@ import { DataHydrationService } from '../../../root/services/data-hydration.serv
      standalone: true,
      imports: [
           PrimeNgDialogComponent,
-          PrimeNgFooterComponent,
-          PrimeNgHeaderComponent,
           ButtonModule,
           PanelModule,
           SubmitLineUpComponent,
           CardModule,
-          CommonModule
+          CommonModule,
+          DateTimePipe,
+          SkeletonModule,
+          DividerModule,
      ],
      providers: [ConfirmationService]
 })
 export class MainWorshipComponent implements OnInit {
 
-     public isSubmitLineUpDialogVisible = false;
-     private currentLoggedInUserId: string = '';
-     protected lineUps: LineUp[] = [];
 
-     items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'];
+     public isSubmitLineUpDialogVisible = false;
+
+     protected lineUps = signal<LineUp[]>([]);
+     protected isFetchingData = signal<boolean>(false);
+     items = [1, 2, 3, 4, 5, 6]
+
+
+     protected sortedLineUps = computed(() => {
+          return this.lineUps().slice().sort((a, b) => {
+               const getTimestamp = (date: any) => {
+                    if (date?.toDate instanceof Function) {
+                         return date.toDate().getTime();
+                    } 
+                    
+                    else if (date instanceof Date) {
+                         return date.getTime(); 
+                    } 
+                    
+                    else {
+                         return 0;
+                    }
+               };
+
+               return getTimestamp(b.worshipDate) - getTimestamp(a.worshipDate);
+          });
+     });
 
      constructor(
           private firebaseService: FirebaseService,
-          private dataHydrationService: DataHydrationService
-          
-     ) {
+          private dataHydrationService: DataHydrationService,
+          private primeNgLoadingSpinnerService: PrimeNgLoadingSpinnerService
 
-          // this.currentLoggedInUserService.userId$.pipe(take(1)).subscribe(userId => {
-          //      this.currentLoggedInUserId = userId || '';
-             
-          //      this.firebaseService.adminGetAllData$<LineUp>(Collection.LINEUPS).pipe(
-          //           tap((res)=> {
-          //                this.lineUps = res.;
-          //                console.log("line up", this.lineUps);
-          //           })
-          //      ).subscribe();
-          // });     
-          
-          // this.dataHydrationService.hydrateReferences$(
+     ) {
+          this.primeNgLoadingSpinnerService.show('Fetching Line Ups...');
+          this.isFetchingData.set(true);
+          this.firebaseService.adminGetAllData$<LineUp>(Collection.LINEUPS).pipe(
+               tap((lineUps: LineUp[]) => {
+                    this.lineUps.set(lineUps);
+               }),
+               finalize(() => {
+                    this.primeNgLoadingSpinnerService.hide();
+                    this.isFetchingData.set(false);
+               })
+          ).subscribe();
+
+          // this.dataHydrationService.hydrateReferences$<LineUp>(
           //      this.firebaseService.adminGetAllData$<LineUp>(Collection.LINEUPS),
           //      {
-          //           createdBy: { collection: Collection.USERS },
           //           singers: { collection: Collection.USERS, isArray: true },
           //      }
-          // ).subscribe(hydratedLineUps => {
-          //      this.lineUps = hydratedLineUps;
-          //      console.log('Fully hydrated lineUps:', this.lineUps);
+          // ).subscribe({
+          //      next: hydratedLineUps => {
+          //           this.lineUps.set(hydratedLineUps);
+          //      },
+          //      error: err => {
+          //           console.error('Hydration error:', err);
+          //      },
+          //      complete: () => {
+
+          //      }
           // });
 
      }
@@ -72,11 +109,17 @@ export class MainWorshipComponent implements OnInit {
 
 
      ngOnInit() {
-       
+
+     }
+
+     public onLineUpAdded(newlyAddedLineUp: LineUp) {
+          this.lineUps.update((lineUps) => [...lineUps, newlyAddedLineUp]);
      }
 
      public openSubmitLineUpDialog(): void {
           this.isSubmitLineUpDialogVisible = true;
      }
+
+ 
 
 }

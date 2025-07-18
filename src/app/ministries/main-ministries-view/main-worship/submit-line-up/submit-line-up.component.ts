@@ -61,8 +61,9 @@ export class SubmitLineUpComponent implements OnInit {
      @ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
      @Input() visible: boolean = false;
      @Output() visibleChange = new EventEmitter<boolean>();
+     @Output() newlyAddedLineup = new EventEmitter<LineUp>();
 
-
+   
 
      private currentLoggedInUserId: string = '';
 
@@ -131,8 +132,6 @@ export class SubmitLineUpComponent implements OnInit {
           // ).subscribe(userId => {
           //      this.currentLoggedInUserId = userId || '';
           // });
-
-          console.log('currentLoggedInUserId on init', this.currentLoggedInUserId);
           this.setNumberOfSingersDefault();
           this.addSong();
      }
@@ -300,10 +299,10 @@ export class SubmitLineUpComponent implements OnInit {
           this.primeNgProgressBarService.show();
           this.firebaseService.adminAddData$(Collection.LINEUPS, lineUp.toJson()).pipe(
                tap((res) => {
-                    console.log('res', res);
                }),
                finalize(()=> {
                     this.primeNgProgressBarService.hide();
+                    this.newlyAddedLineup.emit(lineUp);
                })
           ).subscribe({
                next: () => {
@@ -313,15 +312,12 @@ export class SubmitLineUpComponent implements OnInit {
                     this.viewIndex.set(0);
                     this.visible = false;
                },
-               error: (err) => {
-                    console.log('map line up error', err);
-               }
           });
      }
 
      private mapLineUpDataForm(): LineUp {
           const worshipDate: Date = this.lineUpDataForm.get('worshipDate')?.value;
-          const serviceType: string = this.lineUpDataForm.get('serviceType')?.value;
+          const serviceType: string = this.lineUpDataForm.get('serviceType')?.value.name;
           const singers: User[] = this.lineUpDataForm.get('singers')?.value || [];
           const drummer: User | null = this.lineUpDataForm.get('drummer')?.value;
           const bassist: User | null = this.lineUpDataForm.get('bassist')?.value;

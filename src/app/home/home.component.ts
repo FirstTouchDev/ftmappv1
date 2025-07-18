@@ -16,27 +16,30 @@ import { DateTimePipe } from '../root/pipes/datetime.pipe';
      styleUrls: ['./home.component.scss'],
      standalone: true,
      imports: [
-          PrimeNgHeaderComponent,
           CardModule,
           ButtonModule,
-          PrimeNgFooterComponent,
+          DateTimePipe
      ]
 })
 export class HomeComponent implements OnInit {
 
-     data: any = null;
+     public data: UserAccount = new UserAccount();
 
      constructor(
-          private firebaseService: FirebaseService
+          private firebaseService: FirebaseService,
      ) { }
 
      ngOnInit() {
-          this.firebaseService.adminGetData$<UserAccount>(Collection.USERACCOUNTS, 'jLqyoyabb5uJQVjRm1Gd', UserAccount.fromJson).pipe(
+          this.firebaseService.adminGetSingleData$<UserAccount>(Collection.USERACCOUNTS, 'UA3Y2h80e8Fg4ocmBFKu').pipe(
                tap((res: UserAccount | null) => {
-                    console.log("Results: ", res);
-                    this.data = res;
+                    if (res){
+                         this.data = UserAccount.fromJson(res);
+                    }
                })
           ).subscribe();
+     }
+
+     ngAfterViewInit() {
      }
 
 }

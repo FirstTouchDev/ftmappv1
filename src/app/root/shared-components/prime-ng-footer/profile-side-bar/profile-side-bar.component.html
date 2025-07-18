@@ -1,0 +1,46 @@
+<div class="card flex justify-center">
+     <p-drawer #drawerRef [(visible)]="sidebarVisible" position="right">
+          <ng-template #headless>
+               <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between px-6 pt-4 shrink-0">
+                         <span class="inline-flex items-center gap-2">
+                              <img src="../ftmlogos/ftm_with_text_logo.png" style="height: auto; width: 200px;" />
+                              <!-- <span class="font-semibold text-2xl text-primary">Your Logo</span> -->
+                         </span>
+                         <span>
+                              <p-button type="button" (click)="closeCallback($event)" icon="pi pi-times" rounded="true"
+                                   outlined="true" styleClass="h-8 w-8"></p-button>
+                         </span>
+                    </div>
+                    <div class="overflow-y-auto">
+                         <ul class="list-none p-4 m-0">
+                              <li>
+                                   <a pRipple
+                                        class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                                        <i class="pi pi-home mr-2"></i>
+                                        <span class="font-medium">Dashboard</span>
+                                   </a>
+                              </li>
+                         </ul>
+                    </div>
+                    <div class="mt-auto">
+                         <hr class="mb-4 mx-4 border-t border-0 border-surface" />
+                         <div
+                              class="m-4 flex items-center justify-between p-4 gap-2 rounded-border text-surface-700 dark:text-surface-100 bg-transparent duration-150 transition-colors">
+
+                              <div class="flex items-center gap-2">
+                                   <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                                        shape="circle">
+                                   </p-avatar>
+                                   <span class="font-bold">{{ userData()?.firstLastName }}</span>
+                              </div>
+
+                              <p-button (click)="onLogoutUser()" label="Logout" severity="danger">
+                              </p-button>
+                         </div>
+                    </div>
+
+               </div>
+          </ng-template>
+     </p-drawer>
+</div>

@@ -45,7 +45,7 @@ import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-pr
 
 export class LoginComponent implements OnInit {
 
-     private _verifiedUserAccountDocumentId: string | null = null;
+     private _verifiedUserAccountDocumentId: string = ''
 
      protected isLoading = signal<boolean>(false);
      protected displayEye = signal<boolean>(false);
@@ -63,7 +63,10 @@ export class LoginComponent implements OnInit {
           private primeNgProgressBarService: PrimeNgProgressBarService,
           
      ) {
-          this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
+          if (this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID)){
+               this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID);
+          }
+          //this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
      }
 
      ngOnInit() { }
@@ -83,7 +86,7 @@ export class LoginComponent implements OnInit {
                     }
      
                     this._verifiedUserAccountDocumentId = userAccountDocumentId;
-                    return this.firebaseService.adminGetData$<UserAccount>(Collection.USERACCOUNTS, userAccountDocumentId, UserAccount.fromJson);
+                    return this.firebaseService.adminGetSingleData$<UserAccount>(Collection.USERACCOUNTS, userAccountDocumentId);
                }),
                switchMap((userAccount) => {
                     if (!userAccount) return EMPTY;
@@ -99,23 +102,20 @@ export class LoginComponent implements OnInit {
      
                     if (userAccount.status === ApprovalStatus.APPROVED) {
                          this.localStorageService.set(LocalStorageKey.DOCUMENTMASTERUSERID, this._verifiedUserAccountDocumentId);
-                         return this.firebaseService.adminGetDataByField$<User>(
-                              Collection.USERS,
-                              Field.USERACCOUNTID,
-                              this._verifiedUserAccountDocumentId
-                         );
+                         return this.firebaseService.adminGetDataByFieldAndValue$<User>(Collection.USERS, Field.USERACCOUNTID, this._verifiedUserAccountDocumentId);
                     }
      
                     return EMPTY;
                }),
                tap((user) => {
                     if (!user) return;
+                    
                     this.localStorageService.set(LocalStorageKey.USERDATA, user);
                     this.authService.login();
                     this.router.navigate(['/home']);
                     this.messageService.add({
                          severity: 'success',
-                         summary: 'Login Successful!',
+                         summary: 'Success',
                          detail: 'Welcome back.',
                     });
                    

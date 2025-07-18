@@ -9,16 +9,17 @@ export class LocalStorageService {
           localStorage.setItem(key, JSON.stringify(value));
      }
 
-     public get<T>(key: string): T | null {
+     public get<T>(key: string): T {
           const item = localStorage.getItem(key);
-          return item ? JSON.parse(item) as T : null;
+          if (!item) return null as T;
+          return JSON.parse(item) as T;
      }
 
      public remove(key: string): void {
           localStorage.removeItem(key);
      }
 
-     public    clear(): void {
+     public clear(): void {
           localStorage.clear();
      }
 }

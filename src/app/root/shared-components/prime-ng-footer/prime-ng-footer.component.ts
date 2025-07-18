@@ -14,6 +14,10 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { StyleClassModule } from 'primeng/styleclass';
 import { Sidebar } from 'primeng/sidebar';
+import { StyleClass } from 'primeng/styleclass';
+import { DrawerModule } from 'primeng/drawer';
+import { Drawer } from 'primeng/drawer';
+import { ProfileSideBarService } from './profile-side-bar/profile-side-bar.service';
 
 @Component({
      selector: 'prime-ng-footer',
@@ -31,22 +35,19 @@ import { Sidebar } from 'primeng/sidebar';
           ButtonModule,
           CardModule,
           SidebarModule,
-          StyleClassModule
+          StyleClassModule,
+          DrawerModule,
      ],
      providers: [PrimeIcons]
 })
 export class PrimeNgFooterComponent implements OnInit {
 
-     navItems: { label: string; icon: string; route: string }[] = [];
-     sidebarVisible2: boolean = false;
+     protected navItems: { label: string; icon: string; route: string }[] = [];
 
-     constructor(protected router: Router) { }
-
-     @ViewChild('sidebarRef') sidebarRef!: Sidebar;
-
-    closeCallback(e: any): void {
-        this.sidebarRef.close(e);
-    }
+     constructor(
+          protected router: Router,
+          private profileSideBarService: ProfileSideBarService
+     ) { }
 
      ngOnInit(): void {
           this.navItems = [
@@ -63,8 +64,7 @@ export class PrimeNgFooterComponent implements OnInit {
 
      public reRoute(route: string): void {
           if (route === '/profile'){
-               console.log("ass")
-               this.sidebarVisible2 = true;
+               this.profileSideBarService.showProfileSideBar();
                return;
           }
           this.router.navigateByUrl(route);

@@ -3,7 +3,8 @@
           <div class="flex justify-between items-center py-2 h-6 px-1">
                <!-- Left-aligned text -->
                <div style="display: flex; justify-content: center; align-items: center;">
-                    <img src="../ftmlogos/ftm_with_text_logo.png" style="height: auto; width: 140px;" />
+                    <img *ngIf="!showBackButton()" src="../ftmlogos/ftm_with_text_logo.png" style="height: auto; width: 140px;" />
+                    <p-button *ngIf="showBackButton()" (click)="goBack()" label="Back" icon="fa-solid fa-arrow-left" size="small" severity="secondary" variant="outlined" />
                </div>
      
                <!-- Right-aligned icon -->

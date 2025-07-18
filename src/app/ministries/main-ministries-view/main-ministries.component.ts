@@ -23,8 +23,6 @@ type Ministry = {
      standalone: true,
      imports: [
           PrimeNgDialogComponent,
-          PrimeNgHeaderComponent,
-          PrimeNgFooterComponent,
           ButtonModule,
           CardModule,
           CommonModule,

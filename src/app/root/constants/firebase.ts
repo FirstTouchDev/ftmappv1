@@ -14,11 +14,11 @@ export class Field {
 }
 
 export class Roles {
-     static readonly SINGER = 'singer';
-     static readonly KEYBOARDIST = 'keyboardist';
-     static readonly GUITARIST = 'guitarist';
-     static readonly DRUMMER = 'drummer';
-     static readonly BASSIST = 'bassist';
+     static readonly SINGER = 'Singer';
+     static readonly KEYBOARDIST = 'Keyboardist';
+     static readonly GUITARIST = 'Guitarist';
+     static readonly DRUMMER = 'Drummer';
+     static readonly BASSIST = 'Bassist';
 }
 
 export class Operators {

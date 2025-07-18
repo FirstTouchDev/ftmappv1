@@ -178,7 +178,7 @@ export class SignUpComponent implements OnInit {
 
 
                this.primeNgProgressBarService.show();
-               this.firebaseService.adminCheckDoesDataExist$(Collection.USERACCOUNTS, Field.USERNAME, username).pipe(
+               this.firebaseService.adminGetDataByFieldAndValue$(Collection.USERACCOUNTS, Field.USERNAME, username).pipe(
                     switchMap(exists => {
                          if (exists) {
                               this.customeUsernameErrorMessage.set("Sorry, the username is already taken.");

@@ -3,11 +3,11 @@ import { MenuItem } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
 import { Menubar, MenubarModule } from 'primeng/menubar';
 import { PrimeIcons } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PopoverModule } from 'primeng/popover';
 import { Popover } from 'primeng/popover';
 import { ViewChild } from '@angular/core';
@@ -37,9 +37,23 @@ import { CardModule } from 'primeng/card';
 })
 export class PrimeNgHeaderComponent implements OnInit {
 
+     constructor(
+          private location: Location,
+          private router: Router
+     ){
+
+     }
 
      ngOnInit() {
 
+     }
+
+     public goBack(): void {
+          this.location.back();
+     }
+
+     protected showBackButton(): boolean {
+          return this.router.url !== '/home';
      }
 
 }
