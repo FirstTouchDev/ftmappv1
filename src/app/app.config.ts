@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouteReuseStrategy } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { initializeApp } from 'firebase/app';
@@ -26,11 +26,12 @@ export const appConfig: ApplicationConfig = {
                theme: {
                     preset: Aura,
                     options: {
-                         darkModeSelector: false || 'none'
-                    }
+                    darkModeSelector: '.dark-mode'
+               }
                }
           }),
           MessageService,
-          ConfirmationService
+          ConfirmationService,
+          
      ]
 };

@@ -14,15 +14,16 @@
                     </div>
                     <div class="overflow-y-auto">
                          <ul class="list-none p-4 m-0">
-                              <li>
-                                   <a pRipple
-                                        class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-home mr-2"></i>
-                                        <span class="font-medium">Dashboard</span>
-                                   </a>
+                              <li class="p-4">
+                                   <label class="text-xl">Settings</label>
+                                   <a pRipple class="flex items-center cursor-pointer mt-4">
+                                        <label class="text-base">Dark Mode</label>
+                                        <p-toggleswitch (click)="updateViewMode()" [(ngModel)]="isDarkMode" class="inline-flex items-center justify-center ml-auto" /> </a>
                               </li>
                          </ul>
                     </div>
+
+
                     <div class="mt-auto">
                          <hr class="mb-4 mx-4 border-t border-0 border-surface" />
                          <div

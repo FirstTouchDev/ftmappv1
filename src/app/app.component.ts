@@ -17,6 +17,8 @@ import { ProfileSideBarComponent } from './root/shared-components/prime-ng-foote
 import { PrimeNgDialogComponent } from './root/shared-components/prime-ng-dialog/prime-ng-dialog.component';
 import { ViewChild } from '@angular/core';
 import { ConfirmDialogService } from './root/services/confirm-dialog.service';
+import { LocalStorageService } from './root/services/local-storage.service';
+import { LocalStorageKey } from './root/constants/local-storage';
 
 @Component({
      selector: 'app-root',
@@ -57,8 +59,10 @@ export class AppComponent {
 
      constructor(
           private router: Router,
-          private confirmDialogService: ConfirmDialogService
+          private confirmDialogService: ConfirmDialogService,
+          private localStorageService: LocalStorageService
      ){
+          this._setViewMode();
           this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
                const url = event.urlAfterRedirects;
                const showHeader = this.allowedRoutesForHeader.some(path => url.startsWith(path));
@@ -67,10 +71,19 @@ export class AppComponent {
                this.displayHeader.set(showHeader);
                this.displayFooter.set(showFooter);
 
-          })
+          });
      }
 
      ngAfterViewInit() {
           this.confirmDialogService.register(this.dialog);
+     }
+
+     private _setViewMode(){
+          const isDarkMode: boolean = this.localStorageService.get(LocalStorageKey.ISDARKMODE);
+          if (isDarkMode) {
+               document.documentElement.classList.toggle('dark-mode');
+               document.documentElement.classList.contains('dark-mode');
+          }
+
      }
 }

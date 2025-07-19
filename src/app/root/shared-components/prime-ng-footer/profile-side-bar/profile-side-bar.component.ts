@@ -32,6 +32,11 @@ import { PrimeNgLoadingSpinnerService } from '../../prime-ng-loading-spinner/pri
 import { Collection } from '../../../constants/firebase';
 import { PrimeNgProgressBarService } from '../../prime-ng-progress-bar/prime-ng-progress-bar.service';
 import { finalize, tap } from 'rxjs';
+import { AccordionModule } from 'primeng/accordion';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { FormsModule } from '@angular/forms';
+import { Theme, ThemeService } from '@primeuix/themes';
+import { inject } from '@angular/core';
 
 @Component({
      selector: 'profile-side-bar',
@@ -53,7 +58,9 @@ import { finalize, tap } from 'rxjs';
           ToastModule,
           DrawerModule,
           RippleModule,
-          // PrimeNgDialogComponent
+          AccordionModule,
+          ToggleSwitchModule,
+          FormsModule,
      ],
      providers: [PrimeIcons]
 })
@@ -65,6 +72,9 @@ export class ProfileSideBarComponent implements OnInit {
      protected sidebarVisible: boolean = false;
      protected userData = signal<User | null>(null);
 
+     // Settings
+     protected isDarkMode: boolean = false;
+
      constructor(
           protected router: Router,
           private profileSideBarService: ProfileSideBarService,
@@ -75,7 +85,11 @@ export class ProfileSideBarComponent implements OnInit {
           private confirmDialogService: ConfirmDialogService,
           private firebaseService: FirebaseService,
           private primeNgProgressBarService: PrimeNgProgressBarService, 
-     ) { }
+          //private themeService: ThemeService
+     ) {
+
+          this.isDarkMode = this.localStorageService.get(LocalStorageKey.ISDARKMODE);
+      }
 
      ngOnInit(): void {
           this.profileSideBarService.visible$.subscribe(visible => {
@@ -115,7 +129,7 @@ export class ProfileSideBarComponent implements OnInit {
                          styleClass: 'p-button-secondary p-button-outlined',
                     },
                     {
-                         label: 'Yes, please.',
+                         label: 'Yes',
                          action: () => this.logoutUser(),
                          styleClass: 'p-button-primary',
                     },
@@ -165,6 +179,12 @@ export class ProfileSideBarComponent implements OnInit {
           });
 
 
+     }
+
+     public updateViewMode(): void {
+          document.documentElement.classList.toggle('dark-mode');
+          this.isDarkMode = document.documentElement.classList.contains('dark-mode');
+          this.localStorageService.set(LocalStorageKey.ISDARKMODE, this.isDarkMode);
      }
 
 }
