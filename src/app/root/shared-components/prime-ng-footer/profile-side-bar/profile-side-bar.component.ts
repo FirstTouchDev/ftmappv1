@@ -24,6 +24,14 @@ import { LocalStorageKey } from '../../../constants/local-storage';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { AuthService } from '../../../services/auth.service';
 import { ComponentInjectorService } from '../../../services/component-injector.service';
+import { ToastModule } from 'primeng/toast';
+import { PrimeNgDialogComponent } from "../../prime-ng-dialog/prime-ng-dialog.component";
+import { ConfirmDialogService } from '../../../services/confirm-dialog.service';
+import { FirebaseService } from '../../../services/firebase.service';
+import { PrimeNgLoadingSpinnerService } from '../../prime-ng-loading-spinner/prime-ng-loading-spinner.service';
+import { Collection } from '../../../constants/firebase';
+import { PrimeNgProgressBarService } from '../../prime-ng-progress-bar/prime-ng-progress-bar.service';
+import { finalize, tap } from 'rxjs';
 
 @Component({
      selector: 'profile-side-bar',
@@ -42,14 +50,17 @@ import { ComponentInjectorService } from '../../../services/component-injector.s
           CardModule,
           SidebarModule,
           StyleClassModule,
+          ToastModule,
           DrawerModule,
-          RippleModule
+          RippleModule,
+          // PrimeNgDialogComponent
      ],
-     providers: [PrimeIcons, MessageService]
+     providers: [PrimeIcons]
 })
 export class ProfileSideBarComponent implements OnInit {
 
      @ViewChild('drawerRef') drawerRef!: Drawer;
+     //@ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
 
      protected sidebarVisible: boolean = false;
      protected userData = signal<User | null>(null);
@@ -61,6 +72,9 @@ export class ProfileSideBarComponent implements OnInit {
           private localStorageService: LocalStorageService,
           private authService: AuthService,
           private messageService: MessageService,
+          private confirmDialogService: ConfirmDialogService,
+          private firebaseService: FirebaseService,
+          private primeNgProgressBarService: PrimeNgProgressBarService, 
      ) { }
 
      ngOnInit(): void {
@@ -75,20 +89,82 @@ export class ProfileSideBarComponent implements OnInit {
           this.userData.set(this.dataRetrievalService.getData<User>(LocalStorageKey.USERDATA));
      }
 
-     closeCallback(e: any): void {
-          this.drawerRef.close(e);
+     closeCallback(e?: Event): void {
+          const event = e ?? new Event('close');
+     
+          event.preventDefault();
+          this.drawerRef.close(event);
      }
 
-     public onLogoutUser(): void {
-          this.closeCallback(event);
-          this.authService.logout();
-          this.localStorageService.clear();
-          this.router.navigate(['/login']);
-          this.messageService.add({
-               severity: 'success',
-               summary: 'Success',
-               detail: 'You are logged out successfully!',
+     public confrimUserLogout(): void {
+          this._showAccountCreatedSuccessfullyDialog();
+     }
+
+     private _showAccountCreatedSuccessfullyDialog(): void {
+          this.confirmDialogService.show({
+               header: 'Confirm',
+               message: 'Are you sure you want to logout?',
+               icon: 'fa-solid fa-question',
+               iconColorToken: 'primary-contrast',
+               iconBgColorToken: 'primary',
+               buttons: [
+
+                    {
+                         label: 'No',
+                         action: () => this.confirmDialogService.dismiss(),
+                         styleClass: 'p-button-secondary p-button-outlined',
+                    },
+                    {
+                         label: 'Yes, please.',
+                         action: () => this.logoutUser(),
+                         styleClass: 'p-button-primary',
+                    },
+               ],
           });
+     }
+
+     private logoutUser(): void {
+          const user = this.userData();
+          if (!user || !user.id) {
+               this.messageService.add({
+                    severity: 'error',
+                    summary: 'Failed',
+                    detail: 'Operation failed, no user currently logged in!',
+               })
+               return;
+          }
+          this.primeNgProgressBarService.show();
+
+          const updateLoggedInStatus = { isLoggedIn: false };
+
+          this.firebaseService.adminUpdateData$(Collection.USERS, user.id, updateLoggedInStatus).pipe(
+               finalize(() => {
+                    this.primeNgProgressBarService.hide();
+               })
+          ).subscribe({
+               next: () => {
+                    this.confirmDialogService.dismiss();
+                    this.messageService.add({
+                         severity: 'success',
+                         summary: 'Success',
+                         detail: 'You are logged out successfully!',
+                    });
+
+                    this.closeCallback();
+                    this.authService.logout();
+                    this.localStorageService.clear();
+                    this.router.navigate(['/login']);
+               },
+               error: (err) => {
+                    this.messageService.add({
+                         severity: 'error',
+                         summary: 'Error',
+                         detail: 'Logout failed. Please try again.',
+                    });
+               }
+          });
+
+
      }
 
 }

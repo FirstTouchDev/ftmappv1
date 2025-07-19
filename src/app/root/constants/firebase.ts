@@ -11,6 +11,7 @@ export class Field {
      static readonly USERACCOUNTID = 'userAccountId';
      static readonly CREATEDBY = 'createdBy';
      static readonly ID = 'id';
+     static readonly ISLOGGEDIN = 'isLoggedIn';
 }
 
 export class Roles {

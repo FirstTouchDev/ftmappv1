@@ -1,5 +1,4 @@
-<p-dialog header="Submit Line Up" [modal]="true" [(visible)]="visible" [style]="{ width: '360px' }" (onHide)="closeDialog()">
-     <prime-ng-dialog #primeNgDialog></prime-ng-dialog>
+<p-dialog header="Submit Line Up" [modal]="true" [(visible)]="visible"  (onHide)="closeDialog()">
      <form [formGroup]="lineUpDataForm" (ngSubmit)="onSubmitLineUpDataForm()">
           <div class="schedule" *ngIf="viewIndex() === 0">
                <span class="p-text-secondary block mb-6">Worship Schedule</span>

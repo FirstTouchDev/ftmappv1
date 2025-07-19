@@ -1,14 +1,11 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNgDialogComponent } from '../../../root/shared-components/prime-ng-dialog/prime-ng-dialog.component';;
-import { ConfirmationService } from 'primeng/api';
-import { PrimeNgHeaderComponent } from '../../../root/shared-components/prime-ng-header/prime-ng-header.component';
-import { PrimeNgFooterComponent } from '../../../root/shared-components/prime-ng-footer/prime-ng-footer.component';
 import { SubmitLineUpComponent } from './submit-line-up/submit-line-up.component';
 import { FirebaseService } from '../../../root/services/firebase.service';
-import { Collection, Field } from '../../../root/constants/firebase';
-import { finalize, take, tap } from 'rxjs';
+import { Collection } from '../../../root/constants/firebase';
+import { finalize, tap } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { LineUp } from '../../../root/models/line-up.model';
@@ -18,8 +15,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { PrimeNgLoadingSpinnerService } from '../../../root/shared-components/prime-ng-loading-spinner/prime-ng-loading-spinner.service';
 import { DividerModule } from 'primeng/divider';
 import { computed } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { ElementRef } from '@angular/core';
 
 @Component({
      selector: 'main-worship',
@@ -27,7 +22,6 @@ import { ElementRef } from '@angular/core';
      styleUrls: ['./main-worship.component.scss'],
      standalone: true,
      imports: [
-          PrimeNgDialogComponent,
           ButtonModule,
           PanelModule,
           SubmitLineUpComponent,
@@ -37,7 +31,6 @@ import { ElementRef } from '@angular/core';
           SkeletonModule,
           DividerModule,
      ],
-     providers: [ConfirmationService]
 })
 export class MainWorshipComponent implements OnInit {
 

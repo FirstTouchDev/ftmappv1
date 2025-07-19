@@ -33,6 +33,7 @@ import { PrimeNgDialogComponent } from '../root/shared-components/prime-ng-dialo
 import { User } from '../root/models/user.model';
 import { UserAccount } from '../root/models/user-account.model';
 import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
+import { ConfirmDialogService } from '../root/services/confirm-dialog.service';
 
 @Component({
      selector: 'signup',
@@ -61,15 +62,15 @@ import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-pr
           DropdownModule,
           DatePickerModule,
           InputNumberModule,
-          PrimeNgDialogComponent
+          //PrimeNgDialogComponent
      ],
-     providers: [MessageService, ConfirmationService, CustomValidatorsService]
-})
+     providers: [MessageService,  CustomValidatorsService]
+})  
 
 
 export class SignUpComponent implements OnInit {
 
-     @ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
+    // @ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
 
      protected agreedToDisclaimerMessage = signal<boolean>(false);
      protected activeStep: number = 1;
@@ -94,7 +95,8 @@ export class SignUpComponent implements OnInit {
           private firebaseService: FirebaseService,
           private messageService: MessageService,
           private router: Router,
-          private primeNgProgressBarService: PrimeNgProgressBarService
+          private primeNgProgressBarService: PrimeNgProgressBarService,
+          private confirmDialogService: ConfirmDialogService
      ) {
           this.personalDataForm = this.formBuilder.group({
                firstName: ['', Validators.required],
@@ -235,12 +237,12 @@ export class SignUpComponent implements OnInit {
      }
 
      private _showAccountCreatedSuccessfullyDialog(): void {
-          this.primeNgDialog.show({
+          this.confirmDialogService.show({
                header: 'Success',
                message: 'The account was successfully created! An email will be sent to you once the account is ready.',
                icon: 'fa-solid fa-check',
                iconColorToken: 'primary-contrast',
-          iconBgColorToken: 'primary',
+               iconBgColorToken: 'primary',
                buttons: [
                     {
                          label: 'OK',

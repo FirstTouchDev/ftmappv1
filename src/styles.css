@@ -35,14 +35,25 @@ body {
 	margin: 0 auto;
 }
 
+.p-dialog {
+     width: 400px;
+}
 
+
+::ng-deep .p-dialog-mask {
+     padding: 0 1rem;
+}
 
 @media screen and (max-width: 920px) {
 	.p-toast {
-		padding: 0px 20px 20px 20px;
+		padding: 0px 32px 20px 32px;
 		left: 0;
 		right: 0;
 	}
+
+     .p-dialog {
+          width: 340px;
+     }
 
 	.p-toast-message {
 		width: 100%;

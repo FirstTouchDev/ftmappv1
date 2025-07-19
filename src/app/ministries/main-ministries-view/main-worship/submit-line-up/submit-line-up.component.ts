@@ -5,14 +5,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { GenderOption, GENDERS } from '../../../../root/constants/gender';
 import { DropdownModule } from 'primeng/dropdown';
 import { ServiceTypeOption, SERVICETYPES } from '../../../../root/constants/service';
 import { CommonModule } from '@angular/common';
 import { FormArray } from '@angular/forms';
 import { FirebaseService } from '../../../../root/services/firebase.service';
 import { ApprovalStatus, Collection, Field, Roles } from '../../../../root/constants/firebase';
-import { catchError, finalize, take, tap } from 'rxjs';
 import { User } from '../../../../root/models/user.model';
 import { SelectModule } from 'primeng/select';
 import { TruncatePipe } from '../../../../root/pipes/truncate.pipe';
@@ -23,13 +21,11 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { DatePickerModule } from 'primeng/datepicker';
 import { PrimeNgDialogComponent } from '../../../../root/shared-components/prime-ng-dialog/prime-ng-dialog.component';
 import { ViewChild } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
-import { PrimeNgProgressBar } from '../../../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.component';
 import { PrimeNgProgressBarService } from '../../../../root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.service';
 import { LineUp } from '../../../../root/models/line-up.model';
-import { PrimeNgHeaderComponent } from '../../../../root/shared-components/prime-ng-header/prime-ng-header.component';
-import { PrimeNgFooterComponent } from '../../../../root/shared-components/prime-ng-footer/prime-ng-footer.component';
 import { Output, EventEmitter } from '@angular/core';
+import { tap, finalize } from 'rxjs';
+import { ConfirmDialogService } from '../../../../root/services/confirm-dialog.service';
 
 @Component({
      selector: 'submit-line-up',
@@ -52,13 +48,12 @@ import { Output, EventEmitter } from '@angular/core';
           CommonModule,
           TruncatePipe,
           TextareaModule,
-          PrimeNgDialogComponent,
+          //PrimeNgDialogComponent,
      ],
-     providers: [ConfirmationService]
 })
 export class SubmitLineUpComponent implements OnInit {
 
-     @ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
+     //@ViewChild('primeNgDialog') primeNgDialog!: PrimeNgDialogComponent;
      @Input() visible: boolean = false;
      @Output() visibleChange = new EventEmitter<boolean>();
      @Output() newlyAddedLineup = new EventEmitter<LineUp>();
@@ -85,6 +80,7 @@ export class SubmitLineUpComponent implements OnInit {
           private formBuilder: FormBuilder,
           private firebaseService: FirebaseService,
           private primeNgProgressBarService: PrimeNgProgressBarService,
+          private confirmDialogService: ConfirmDialogService
           
      ) {
 
@@ -306,6 +302,7 @@ export class SubmitLineUpComponent implements OnInit {
                })
           ).subscribe({
                next: () => {
+
                     this._showLineUpSubmittedSuccessfullyDialog();
                     this.lineUpDataForm.reset();
                     this.enableAllControls();
@@ -358,7 +355,8 @@ export class SubmitLineUpComponent implements OnInit {
      }
 
      private _showLineUpSubmittedSuccessfullyDialog(): void {
-          this.primeNgDialog.show({
+          
+          this.confirmDialogService.show({
                header: 'Success',
                message: 'The line up was successfully created! The line up will go through approval process. Please check for notifications.',
                icon: 'fa-solid fa-circle-check',
@@ -367,16 +365,22 @@ export class SubmitLineUpComponent implements OnInit {
                buttons: [
                     {
                          label: 'OK',
-                         action: () => this.primeNgDialog.dismissDialog(),
+                         action: () => this._submissionAcknowledgementConfirm(),
                          styleClass: 'p-button-primary',
                     },
                ],
           });
      }
 
+     private _submissionAcknowledgementConfirm(): void {
+          this.confirmDialogService.dismiss();
+     }
+
      public closeDialog(): void {
           this.visible = false;
           this.visibleChange.emit(false);
      }
+
+     
 
 }

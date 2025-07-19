@@ -17,7 +17,6 @@ import { FluidModule } from 'primeng/fluid';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
 import { Router, RouterModule } from '@angular/router';
 import { switchMap, EMPTY, catchError, of } from 'rxjs';
 import { AuthService } from '../root/services/auth.service';
@@ -32,7 +31,6 @@ import { PrimeNgProgressBarService } from '../root/shared-components/prime-ng-pr
      imports: [
           FloatLabelModule,
           FluidModule,
-          MessageModule,
           ToastModule,
           CommonModule, 
           FormsModule, 
@@ -66,7 +64,6 @@ export class LoginComponent implements OnInit {
           if (this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID)){
                this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID);
           }
-          //this._verifiedUserAccountDocumentId = this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) ? this.localStorageService.get(LocalStorageKey.DOCUMENTMASTERUSERID) : null;
      }
 
      ngOnInit() { }
@@ -108,8 +105,10 @@ export class LoginComponent implements OnInit {
                     return EMPTY;
                }),
                tap((user) => {
-                    if (!user) return;
-                    
+                    if (!user || !user.id) return;
+
+                    const updateLoggedInStatus  = { isLoggedIn: true };
+                    this.firebaseService.adminUpdateData$(Collection.USERS, user.id, updateLoggedInStatus);
                     this.localStorageService.set(LocalStorageKey.USERDATA, user);
                     this.authService.login();
                     this.router.navigate(['/home']);

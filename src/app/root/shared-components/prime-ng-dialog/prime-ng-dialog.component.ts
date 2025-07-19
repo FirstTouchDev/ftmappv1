@@ -50,7 +50,9 @@ export class PrimeNgDialogComponent {
           // Extend as needed
      };
 
-     constructor(private confirmationService: ConfirmationService) { }
+     constructor(
+          private confirmationService: ConfirmationService
+     ) { }
 
      private resolveColorToken(token?: string, fallback?: string): string {
           if (!token) return fallback ?? '#000000';
@@ -67,12 +69,9 @@ export class PrimeNgDialogComponent {
                this.iconBgColor = this.resolveColorToken(config.iconBgColorToken, config.iconBgColor ?? this.iconBgColor);
                this.buttons = config.buttons ?? this.buttons;
           }
-
           this.confirmationService.confirm({
                header: this.header,
                message: this.message,
-               accept: () => this.buttons[0]?.action?.(),
-               reject: () => this.buttons[1]?.action?.()
           });
      }
 

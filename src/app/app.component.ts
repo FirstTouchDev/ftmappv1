@@ -6,7 +6,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { MessageModule } from 'primeng/message';
 import { PrimeNgProgressBar } from "./root/shared-components/prime-ng-progress-bar/prime-ng-progress-bar.component";
 import { PrimeNgLoadingBar } from "./root/shared-components/prime-ng-loading-spinner/prime-ng-loading-spinner.component";
 import { PrimeNgHeaderComponent } from './root/shared-components/prime-ng-header/prime-ng-header.component';
@@ -15,28 +14,32 @@ import { signal } from '@angular/core';
 import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ProfileSideBarComponent } from './root/shared-components/prime-ng-footer/profile-side-bar/profile-side-bar.component';
+import { PrimeNgDialogComponent } from './root/shared-components/prime-ng-dialog/prime-ng-dialog.component';
+import { ViewChild } from '@angular/core';
+import { ConfirmDialogService } from './root/services/confirm-dialog.service';
 
 @Component({
      selector: 'app-root',
      imports: [
           RouterOutlet, 
-          ToastModule,
-          MessageModule, 
+          ToastModule, 
           PrimeNgProgressBar,
           PrimeNgLoadingBar, 
           PrimeNgHeaderComponent, 
           PrimeNgFooterComponent,
           CommonModule,
+          PrimeNgDialogComponent
      ],
      templateUrl: './app.component.html',
      styleUrl: './app.component.css',
      standalone: true,
-     providers: [MessageService],
+     providers: [],
 })
 export class AppComponent {
      
      title = 'ftmapp';
 
+     @ViewChild('globalDialog') dialog!: PrimeNgDialogComponent;
      protected displayHeader = signal<boolean>(false);
      protected displayFooter = signal<boolean>(false);
 
@@ -53,7 +56,8 @@ export class AppComponent {
      ]
 
      constructor(
-          private router: Router
+          private router: Router,
+          private confirmDialogService: ConfirmDialogService
      ){
           this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
                const url = event.urlAfterRedirects;
@@ -64,5 +68,9 @@ export class AppComponent {
                this.displayFooter.set(showFooter);
 
           })
+     }
+
+     ngAfterViewInit() {
+          this.confirmDialogService.register(this.dialog);
      }
 }

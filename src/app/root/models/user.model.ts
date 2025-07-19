@@ -19,6 +19,7 @@ export class User {
      firstLastName?: string;
      fullName?: string;
      roles: string[]
+     isLoggedIn: boolean;
 
      constructor(data: Partial<User> = {}) {
           this.userAccountId = data.userAccountId || '';
@@ -37,6 +38,7 @@ export class User {
           this.firstLastName = data.firstName + " " + data.lastName;
           this.fullName = data.firstName + " " + data.middleName + " " + data.lastName;
           this.roles = data.roles || [];
+          this.isLoggedIn = data.isLoggedIn || false;
      }
 
      static fromJson(json: any): User {
@@ -57,6 +59,7 @@ export class User {
                firstLastName: json.firstLastName,
                fullName: json.fullName,
                roles: json.roles || [],
+               isLoggedIn: json.isLoggedIn,
           });
      }
 
@@ -78,6 +81,7 @@ export class User {
                firstLastName: this.firstLastName,
                fullName: this.fullName,
                roles: this.roles,
+               isLoggedIn: this.isLoggedIn
           };
      }
 
@@ -94,6 +98,7 @@ export class User {
                updatedAt: new Date(),
                roles: [],
                firstLastName: 'All',
+               isLoggedIn: false,
           });
      }
 }

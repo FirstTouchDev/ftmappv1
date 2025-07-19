@@ -13,6 +13,7 @@ import Aura from '@primeuix/themes/aura';
 import Lara from '@primeuix/themes/lara';
 
 import { routes } from './app.routes';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
      providers: [
@@ -28,6 +29,8 @@ export const appConfig: ApplicationConfig = {
                          darkModeSelector: false || 'none'
                     }
                }
-          })
+          }),
+          MessageService,
+          ConfirmationService
      ]
 };
